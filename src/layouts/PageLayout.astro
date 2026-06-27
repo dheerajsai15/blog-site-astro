@@ -1,0 +1,65 @@
+---
+import Head from "@components/Head.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import { SITE } from "@consts";
+
+type Props = {
+  title: string;
+  description: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title={`${title} | ${SITE.NAME}`} description={description} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <!--
+      Mermaid renders any <pre class="mermaid"> blocks in posts into SVG, client
+      side. It runs on astro:page-load so it also fires after View Transition
+      navigations (not just the first DOMContentLoaded).
+    -->
+    <script is:inline>
+      function renderMermaid() {
+        if (!document.querySelector(".mermaid:not([data-processed])")) return;
+        import("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs")
+          .then(({ default: mermaid }) => {
+            const dark = document.documentElement.classList.contains("dark");
+            mermaid.initialize({
+              startOnLoad: false,
+              securityLevel: "loose",
+              theme: dark ? "dark" : "neutral",
+            });
+            mermaid.run({ querySelector: ".mermaid:not([data-processed])" });
+          })
+          .catch((e) => console.error("[mermaid]", e));
+      }
+      document.addEventListener("astro:page-load", renderMermaid);
+    </script>
+
+    <style is:global>
+      /* Diagram blocks should not inherit the code-block chrome. */
+      pre.mermaid {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        text-align: center;
+        line-height: normal;
+      }
+      pre.mermaid:not([data-processed]) {
+        /* hide the raw graph source until Mermaid swaps in the SVG */
+        color: transparent;
+      }
+    </style>
+  </body>
+</html>

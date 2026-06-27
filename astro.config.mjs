@@ -4,6 +4,6 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  site: "https://blog.dheprojects.",
+  site: "https://blog.dheprojects.in",
   integrations: [mdx(), sitemap(), tailwind()],
 });

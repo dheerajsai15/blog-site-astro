@@ -1,10 +1,10 @@
 ---
-title: "Anatomy of an autonomous PR review agent on LangGraph.js"
+title: "Anatomy of an PR review agent on LangGraph.js"
 description: "A node-by-node walkthrough of a GitHub PR review agent built as a LangGraph.js StateGraph — the shared state, every node's job, the parallel fan-out, the human gate, and the CLI that drives it all."
 date: "Jun 27 2026"
 ---
 
-I built an autonomous code-review agent for GitHub pull requests on [LangGraph.js](https://langchain-ai.github.io/langgraphjs/). You give it a PR URL; it fetches the diff, reviews each changed file with an LLM **in parallel**, pauses for a human to approve, and posts a single summary comment back to the PR.
+I built an code-review agent for GitHub pull requests on [LangGraph.js](https://langchain-ai.github.io/langgraphjs/). You give it a PR URL; it fetches the diff, reviews each changed file with an LLM **in parallel**, pauses for a human to approve, and posts a single summary comment back to the PR.
 
 This post takes it apart: the graph, each node and what it actually does, how the CLI drives the whole thing, and the durable pause that lets a run be resumed days later from a different machine.
 
@@ -292,4 +292,4 @@ Re-running the same PR at the same commit resumes; re-running after a push start
 
 ## What I'd take away
 
-The interesting parts here weren't the LLM calls — there's only one LLM node, and it's the simplest. The substance is in the wiring: a shared state with reducers, a dynamic `Send` fan-out joined by a superstep barrier, a one-line `interrupt()` made durable by a checkpointer, and a CLI thin enough to be obvious — parse, invoke to the gate, resume. Deterministic code does the triage and aggregation where an LLM would only add noise. The graph earns its place precisely where a plain function would struggle: parallelism with a join, and a pause that outlives the process.
+The interesting parts here weren't the LLM calls — there's only one LLM node, and it's the simplest. The substance is in the wiring: a shared state with reducers, a dynamic `Send` fan-out joined by a superstep barrier, a one-line `interrupt()` made durable by a checkpointer, and a CLI thin enough to be obvious — parse, invoke to the gate, resume. Deterministic code does the triage and aggregation where an LLM would only add noise.

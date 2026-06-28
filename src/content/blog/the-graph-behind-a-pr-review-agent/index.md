@@ -290,6 +290,76 @@ The `thread_id` is the identity of a run, and the choice of key is deliberate:
 
 Re-running the same PR at the same commit resumes; re-running after a push starts over. Exactly the granularity you want.
 
+## Where this goes next
+
+What I've described is the engine. To run it as a real service that watches a busy repo, three things need to change.
+
+### From a user token to a GitHub App
+
+Today `ingest` and `post` authenticate with a personal `GITHUB_TOKEN`. That's fine for a CLI you run yourself, but it means every comment is posted as *me*, the token carries my full account scope, and rate limits are shared across everything I do.
+
+A [GitHub App](https://docs.github.com/en/apps) is the right identity for a bot:
+
+- It comments as its own entity ("PR Review Bot"), not a human.
+- Permissions are scoped to exactly what it needs — read PR contents, write PR comments — and granted per-repo at install time.
+- It authenticates per *installation*: a short-lived JWT signed with the app's private key is exchanged for an installation token, which carries its own, higher rate limit per repo.
+- It can subscribe to **webhooks**, so instead of me running `review <url>`, GitHub pushes a `pull_request` event the moment a PR opens or gets new commits.
+
+That last point flips the whole trigger model: the CLI's `parsePrUrl → fetchPrMeta` becomes a webhook handler that reads `owner/repo/number/sha` straight off the event payload and kicks off the graph. The `thread_id = prId:sha` key already fits this perfectly — a `synchronize` event (new commits) naturally becomes a new thread.
+
+### Handling context: give the agent the whole repo, not a diff
+
+The `review` node currently sees one file's diff in isolation. A diff hunk with no surrounding code is a thin thing to reason about — the model can't see the function it's halfway inside, the type being passed in, or the caller three files over. That produces confident-but-wrong findings, the exact noise the confidence filter is trying to suppress.
+
+The instinct is to *feed* the model more context: expand the hunk, attach the file's imports, build an embeddings index and retrieve the few snippets that look relevant. That works, but it's all *guessing in advance* what a reviewer will need, and it keeps the model passive — it can only reason over whatever you decided to paste in.
+
+I think the better answer is to stop pre-fetching context and instead **give the agent a real checkout it can explore itself.** Spin up a fresh [microVM](https://github.com/firecracker-microvm/firecracker) per review, `git fetch` the PR's head SHA, and hand the model a set of tools over that filesystem:
+
+- `grep`/`ripgrep` to find callers and definitions,
+- "read file" to open any neighbour, not just the changed ones,
+- the project's own **build, type checker, and linter** — whatever the repo actually uses — to see what the change breaks,
+- optionally the **test suite**, so a finding can be *confirmed* rather than guessed.
+
+This turns `review` from "summarise a diff" into a small agentic loop: the model decides what it needs to look at, pulls it, and reasons over ground truth. Context stops being something I prepare and becomes something the agent gathers on demand — which is exactly how a human reviewer works.
+
+The reason it has to be a **microVM** and not just a temp directory is trust. A PR is untrusted code, and the moment you run its build or tests you're executing it. A microVM gives you a real kernel boundary, a disposable filesystem, no network (or a tightly scoped one), and a hard CPU/memory/time budget — then you throw the whole thing away when the review finishes. A checkout keyed by the same `prId:sha` even maps cleanly onto the existing `thread_id`.
+
+The cost is real — booting a VM and running a build is far heavier than pasting a diff into a prompt — which is exactly why it pairs with the next concern: you only want to pay for a full checkout-and-build on a PR that's actually still live.
+
+#### This reshapes the graph
+
+A checkout isn't a free upgrade to the `review` node — it changes the shape of the graph, because it breaks two assumptions the current design quietly relies on.
+
+The first is that **each `review` branch is fully self-contained.** With `Send("review", { file })`, the obvious implementation gives every branch its own everything. But the microVM is a per-*run* resource: booting it, fetching the repo, and running a build are wildly expensive to do N times for the same PR. So the workspace has to be created **once per run** and *shared* by the branches:
+
+```
+ingest → setup     (boot microVM · git fetch sha · build once)
+       → review×N  (fan-out; branches share the read-only checkout)
+       → aggregate
+       → teardown  (destroy the VM — on every exit path)
+```
+
+- **Building is a per-run, project-wide operation, not a per-file one.** Whatever the repo's toolchain is — a compiler, a type checker, a linter, across whatever languages the PR touches — it runs over the project, once, in `setup`. Its output becomes shared state that every `review` branch reads, instead of N branches each re-running it.
+- **The fan-out survives, but only as a parallelism dial.** Branches still review in parallel, they just share the one checkout rather than owning a VM each. Concurrent *reads* — grep, open a neighbouring file — are safe, and that's most of what a review actually does.
+- **Teardown has to be guaranteed.** The graph has three terminal outcomes (skipped, aborted, posted); a VM that leaks on the abort path is a real bug. Cleanup can't hang off the happy-path `post` node — it needs to run however the graph exits.
+
+The second assumption that breaks is that **a `review` branch owns its context.** Once the whole point is cross-file reasoning, a branch that can only see its one file is fighting the feature you built the VM for. The file becomes the unit you *attribute findings to*, not the boundary of what a branch is allowed to look at.
+
+None of this is a reason not to do it — it's the honest cost. The per-file fan-out was the right call for stateless diff-summary branches. A shared, stateful, expensive workspace is a different problem, and the graph has to grow to match it.
+
+### Queues: decoupling the trigger from the work
+
+Once a webhook fires the graph instead of a human, the work needs somewhere to live. A review is slow (N parallel LLM calls) and bursty (ten PRs can land in a minute). You can't do that synchronously inside a webhook handler — GitHub wants a `2xx` in seconds, and a crash mid-handler loses the event.
+
+The fix is a **queue** between the webhook and the graph:
+
+1. The webhook handler does almost nothing — validate the signature, enqueue a job (`{ owner, repo, number, sha }`), return `200` immediately.
+2. A pool of **workers** pulls jobs and runs the graph. Concurrency is now a dial you control, which keeps you under the API rate limit and bounds LLM spend.
+3. **Retries and idempotency** come from the queue: a failed job is redelivered, and because the `thread_id` is deterministic (`prId:sha`), re-processing the same event resumes the existing run instead of starting a duplicate.
+4. **Superseding:** when new commits arrive, you can cancel the in-flight job for the old SHA — no point finishing a review of a diff nobody will look at.
+
+Notice the queue sits *outside* the graph and the graph's own checkpointer sits *inside* it. They solve different problems: the queue distributes and retries whole runs across workers; the checkpointer makes a single run durable and resumable. Together they're what turns this from a script I run into a service that runs itself.
+
 ## What I'd take away
 
 The interesting parts here weren't the LLM calls — there's only one LLM node, and it's the simplest. The substance is in the wiring: a shared state with reducers, a dynamic `Send` fan-out joined by a superstep barrier, a one-line `interrupt()` made durable by a checkpointer, and a CLI thin enough to be obvious — parse, invoke to the gate, resume. Deterministic code does the triage and aggregation where an LLM would only add noise.

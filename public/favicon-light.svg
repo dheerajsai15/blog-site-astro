@@ -1,16 +1,11 @@
-<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="blogAccent" x1="3" y1="21" x2="21" y2="3" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D83333"/>
-      <stop offset="1" stop-color="#F041FF"/>
+    <linearGradient id="dAvatar" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCD34D"/>
+      <stop offset="1" stop-color="#F59E0B"/>
     </linearGradient>
   </defs>
-  <!-- page -->
-  <rect x="4" y="2.75" width="13" height="18.5" rx="2.5" stroke="#111111" stroke-width="1.8"/>
-  <!-- title line (accent) -->
-  <line x1="7" y1="7.25" x2="14" y2="7.25" stroke="url(#blogAccent)" stroke-width="2.2" stroke-linecap="round"/>
-  <!-- body lines -->
-  <line x1="7" y1="11" x2="14" y2="11" stroke="#111111" stroke-width="1.7" stroke-linecap="round"/>
-  <line x1="7" y1="14.25" x2="14" y2="14.25" stroke="#111111" stroke-width="1.7" stroke-linecap="round"/>
-  <line x1="7" y1="17.5" x2="11" y2="17.5" stroke="#111111" stroke-width="1.7" stroke-linecap="round"/>
+  <circle cx="12" cy="12" r="12" fill="url(#dAvatar)"/>
+  <text x="12" y="12" fill="#1c1917" font-family="Georgia, 'Times New Roman', serif"
+        font-size="14" font-weight="700" text-anchor="middle" dominant-baseline="central">D</text>
 </svg>

@@ -1,0 +1,88 @@
+<svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .comp-title { font-size: 16px; font-weight: 700; fill: #ffffff; }
+      .comp-desc { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #6b7280; }
+      .badge { font-size: 11px; font-weight: 600; }
+    </style>
+    <filter id="soft2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">Inside the Master Node</text>
+  <text x="40" y="68" class="subtitle">The control plane: four components that decide what the cluster should look like</text>
+
+  <!-- Master boundary -->
+  <rect x="40" y="90" width="820" height="440" rx="16" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  <rect x="40" y="90" width="820" height="6" rx="3" fill="#326CE5"/>
+  <text x="62" y="120" class="badge" fill="#326CE5">CONTROL PLANE</text>
+
+  <!-- API Server (central hub) -->
+  <g filter="url(#soft2)">
+    <rect x="330" y="150" width="240" height="90" rx="12" fill="#326CE5"/>
+  </g>
+  <text x="450" y="185" class="comp-title" text-anchor="middle">kube-apiserver</text>
+  <text x="450" y="207" font-size="12" fill="#dbeafe" text-anchor="middle">The only component everything</text>
+  <text x="450" y="223" font-size="12" fill="#dbeafe" text-anchor="middle">talks to — REST/HTTP front door</text>
+
+  <!-- etcd -->
+  <g filter="url(#soft2)">
+    <rect x="330" y="380" width="240" height="90" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+  </g>
+  <rect x="330" y="380" width="240" height="30" rx="12" fill="#f59e0b"/>
+  <rect x="330" y="396" width="240" height="14" fill="#f59e0b"/>
+  <text x="450" y="401" class="comp-title" text-anchor="middle">etcd</text>
+  <text x="450" y="432" class="comp-desc" text-anchor="middle" font-weight="600">Key–value store</text>
+  <text x="450" y="450" class="tiny" text-anchor="middle">The single source of truth for all cluster state</text>
+
+  <!-- Scheduler -->
+  <g filter="url(#soft2)">
+    <rect x="60" y="270" width="230" height="110" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="2"/>
+  </g>
+  <rect x="60" y="270" width="230" height="30" rx="12" fill="#8b5cf6"/>
+  <rect x="60" y="286" width="230" height="14" fill="#8b5cf6"/>
+  <text x="175" y="291" class="comp-title" text-anchor="middle">kube-scheduler</text>
+  <text x="175" y="326" class="comp-desc" text-anchor="middle" font-weight="600">Assigns new pods to nodes</text>
+  <text x="175" y="346" class="tiny" text-anchor="middle">Picks the best node based on</text>
+  <text x="175" y="362" class="tiny" text-anchor="middle">resources, affinity &amp; constraints</text>
+
+  <!-- Controller Manager -->
+  <g filter="url(#soft2)">
+    <rect x="610" y="270" width="230" height="110" rx="12" fill="#ffffff" stroke="#0ea5e9" stroke-width="2"/>
+  </g>
+  <rect x="610" y="270" width="230" height="30" rx="12" fill="#0ea5e9"/>
+  <rect x="610" y="286" width="230" height="14" fill="#0ea5e9"/>
+  <text x="725" y="291" class="comp-title" text-anchor="middle">controller-manager</text>
+  <text x="725" y="326" class="comp-desc" text-anchor="middle" font-weight="600">Runs reconciliation loops</text>
+  <text x="725" y="346" class="tiny" text-anchor="middle">Watches actual vs desired state</text>
+  <text x="725" y="362" class="tiny" text-anchor="middle">and drives them together</text>
+
+  <!-- Connections: everything <-> apiserver -->
+  <g stroke="#64748b" stroke-width="2" fill="none">
+    <!-- scheduler <-> apiserver -->
+    <path d="M290 300 C 340 280, 320 220, 328 205" marker-end="url(#a2)"/>
+    <!-- controller <-> apiserver -->
+    <path d="M610 300 C 560 280, 580 220, 572 205" marker-end="url(#a2)"/>
+    <!-- apiserver <-> etcd (only apiserver reads/writes etcd) -->
+    <path d="M450 242 L 450 376" marker-end="url(#a2)"/>
+    <path d="M470 376 L 470 244" marker-end="url(#a2)"/>
+  </g>
+  <text x="482" y="315" class="tiny" fill="#9a3412" font-weight="600">reads / writes</text>
+
+  <!-- External clients arrow -->
+  <g stroke="#326CE5" stroke-width="2.5" fill="none">
+    <path d="M450 118 L 450 148" marker-end="url(#a2)"/>
+  </g>
+  <text x="450" y="112" class="tiny" text-anchor="middle" fill="#326CE5" font-weight="600">we send our desired state here →</text>
+
+  <text x="62" y="512" class="tiny">Note: only the API server talks to etcd. Every other component goes through the API server.</text>
+</svg>

@@ -126,7 +126,7 @@ Same result as `kubectl run`, but now it's written down. From here on, everythin
 One important catch, called out at the bottom of the diagram: **a bare pod is not self-healing**. If this pod crashes or its node dies, nothing brings it back. The self-healing magic from Part 1 comes from controllers — and the controller whose job is to keep pods alive is the ReplicaSet. Delete this pod before moving on:
 
 ```bash
-kubectl delete -f pod.yaml
+kubectl delete pod nginx
 ```
 
 ## 4. ReplicaSets: keep N copies alive
@@ -207,7 +207,7 @@ kubectl get pods
 
 A brand new pod appears within seconds. The count dropped to 2, the controller saw 2 ≠ 3, and it fixed the gap. *This* is the self-healing we talked about in Part 1, and now you've watched it happen.
 
-Clean up with `kubectl delete -f replicaset.yaml`.
+Clean up with `kubectl delete rs nginx-replicaset` — deleting the ReplicaSet takes its pods down with it.
 
 ## 5. Deployments: ReplicaSets with superpowers
 
@@ -254,6 +254,8 @@ So compared with using a ReplicaSet directly, a Deployment gives you:
 - **Revision history** — every change creates a new revision (`kubectl rollout history deployment/nginx-deployment` shows them), so your deploys are versioned and declarative.
 
 The hierarchy to remember: **Deployment → creates and manages ReplicaSets → which create and manage Pods.** In practice you write Deployments, and the ReplicaSets underneath are an implementation detail you mostly just observe with `kubectl get rs`.
+
+Clean up with `kubectl delete deployment nginx-deployment` — it removes the Deployment, its ReplicaSets, and their pods in one go.
 
 ## Wrapping up
 

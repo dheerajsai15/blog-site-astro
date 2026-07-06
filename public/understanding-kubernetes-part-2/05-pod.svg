@@ -1,0 +1,81 @@
+<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; }
+      .key { fill: #7dd3fc; }
+      .val { fill: #fde68a; }
+      .plain { fill: #cbd5e1; }
+    </style>
+    <filter id="psoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <marker id="parr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#326CE5"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="520" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">The Pod: smallest deployable unit</text>
+  <text x="40" y="68" class="subtitle">You write a manifest (left) → Kubernetes creates the pod (right)</text>
+
+  <!-- YAML panel -->
+  <g filter="url(#psoft)">
+    <rect x="40" y="95" width="380" height="330" rx="12" fill="#1e293b"/>
+  </g>
+  <rect x="40" y="95" width="380" height="34" rx="12" fill="#0f172a"/>
+  <rect x="40" y="112" width="380" height="17" fill="#0f172a"/>
+  <circle cx="62" cy="112" r="5" fill="#ef4444"/>
+  <circle cx="80" cy="112" r="5" fill="#f59e0b"/>
+  <circle cx="98" cy="112" r="5" fill="#22c55e"/>
+  <text x="230" y="117" class="mono" fill="#94a3b8" text-anchor="middle">pod.yaml</text>
+
+  <g class="mono">
+    <text x="62" y="158"><tspan class="key">apiVersion:</tspan><tspan class="val"> v1</tspan></text>
+    <text x="62" y="182"><tspan class="key">kind:</tspan><tspan class="val"> Pod</tspan></text>
+    <text x="62" y="206"><tspan class="key">metadata:</tspan></text>
+    <text x="62" y="230"><tspan class="plain">  </tspan><tspan class="key">name:</tspan><tspan class="val"> nginx</tspan></text>
+    <text x="62" y="254"><tspan class="key">spec:</tspan></text>
+    <text x="62" y="278"><tspan class="plain">  </tspan><tspan class="key">containers:</tspan></text>
+    <text x="62" y="302"><tspan class="plain">  - </tspan><tspan class="key">name:</tspan><tspan class="val"> nginx</tspan></text>
+    <text x="62" y="326"><tspan class="plain">    </tspan><tspan class="key">image:</tspan><tspan class="val"> nginx</tspan></text>
+    <text x="62" y="350"><tspan class="plain">    </tspan><tspan class="key">ports:</tspan></text>
+    <text x="62" y="374"><tspan class="plain">    - </tspan><tspan class="key">containerPort:</tspan><tspan class="val"> 80</tspan></text>
+  </g>
+
+  <!-- arrow -->
+  <g stroke="#326CE5" stroke-width="2.5" fill="none">
+    <path d="M430 260 L 495 260" marker-end="url(#parr)"/>
+  </g>
+  <text x="462" y="245" class="tiny" text-anchor="middle" fill="#326CE5" font-weight="700">apply</text>
+
+  <!-- Pod visual -->
+  <g filter="url(#psoft)">
+    <rect x="510" y="130" width="350" height="260" rx="16" fill="#ffffff" stroke="#6ee7b7" stroke-width="2.5"/>
+  </g>
+  <rect x="510" y="130" width="350" height="40" rx="16" fill="#10b981"/>
+  <rect x="510" y="150" width="350" height="20" fill="#10b981"/>
+  <text x="685" y="156" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle">Pod: nginx</text>
+
+  <!-- container inside pod -->
+  <rect x="540" y="192" width="290" height="120" rx="10" fill="#d1fae5" stroke="#34d399" stroke-width="1.5"/>
+  <text x="685" y="220" class="small" text-anchor="middle" font-weight="700" fill="#065f46">container: nginx</text>
+  <rect x="570" y="236" width="230" height="30" rx="6" fill="#ffffff"/>
+  <text x="685" y="256" class="tiny" text-anchor="middle" fill="#065f46">image: nginx  ·  listening on :80</text>
+  <rect x="570" y="274" width="230" height="26" rx="6" fill="#a7f3d0"/>
+  <text x="685" y="291" class="tiny" text-anchor="middle" fill="#065f46">port 80 exposed inside the pod</text>
+
+  <!-- shared resources footer inside pod -->
+  <rect x="540" y="326" width="290" height="44" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="685" y="344" class="tiny" text-anchor="middle" font-weight="600" fill="#166534">pod gets its own IP address</text>
+  <text x="685" y="360" class="tiny" text-anchor="middle" fill="#166534">containers inside share network &amp; storage</text>
+
+  <!-- caption strip -->
+  <rect x="40" y="445" width="820" height="52" rx="10" fill="#fef9c3" stroke="#fde047"/>
+  <text x="450" y="466" class="small" text-anchor="middle" font-weight="700" fill="#713f12">⚠ A bare pod is NOT self-healing</text>
+  <text x="450" y="484" class="tiny" text-anchor="middle" fill="#854d0e">If this pod dies, nothing recreates it — that's the job of a ReplicaSet (next diagram)</text>
+</svg>

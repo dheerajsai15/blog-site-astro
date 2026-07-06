@@ -1,0 +1,132 @@
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+      .key { fill: #7dd3fc; }
+      .val { fill: #fde68a; }
+      .plain { fill: #cbd5e1; }
+      .hl { fill: #f472b6; font-weight: 700; }
+    </style>
+    <filter id="rsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <marker id="rarr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8b5cf6"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="620" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">ReplicaSet: keep N copies alive</text>
+  <text x="40" y="68" class="subtitle">One controller, one template, a promise: "there will always be 3 pods matching this label"</text>
+
+  <!-- YAML panel (left) -->
+  <g filter="url(#rsoft)">
+    <rect x="40" y="95" width="390" height="470" rx="12" fill="#1e293b"/>
+  </g>
+  <rect x="40" y="95" width="390" height="34" rx="12" fill="#0f172a"/>
+  <rect x="40" y="112" width="390" height="17" fill="#0f172a"/>
+  <circle cx="62" cy="112" r="5" fill="#ef4444"/>
+  <circle cx="80" cy="112" r="5" fill="#f59e0b"/>
+  <circle cx="98" cy="112" r="5" fill="#22c55e"/>
+  <text x="235" y="117" class="mono" fill="#94a3b8" text-anchor="middle">replicaset.yaml</text>
+
+  <g class="mono">
+    <text x="60" y="154"><tspan class="key">apiVersion:</tspan><tspan class="val"> apps/v1</tspan></text>
+    <text x="60" y="176"><tspan class="key">kind:</tspan><tspan class="val"> ReplicaSet</tspan></text>
+    <text x="60" y="198"><tspan class="key">metadata:</tspan></text>
+    <text x="60" y="220"><tspan class="plain">  </tspan><tspan class="key">name:</tspan><tspan class="val"> nginx-replicaset</tspan></text>
+    <text x="60" y="242"><tspan class="key">spec:</tspan></text>
+    <text x="60" y="264"><tspan class="plain">  </tspan><tspan class="hl">replicas: 3</tspan></text>
+    <text x="60" y="286"><tspan class="plain">  </tspan><tspan class="key">selector:</tspan></text>
+    <text x="60" y="308"><tspan class="plain">    </tspan><tspan class="key">matchLabels:</tspan></text>
+    <text x="60" y="330"><tspan class="plain">      </tspan><tspan class="hl">app: nginx</tspan></text>
+    <text x="60" y="352"><tspan class="plain">  </tspan><tspan class="key">template:</tspan><tspan class="plain">          # pod blueprint</tspan></text>
+    <text x="60" y="374"><tspan class="plain">    </tspan><tspan class="key">metadata:</tspan></text>
+    <text x="60" y="396"><tspan class="plain">      </tspan><tspan class="key">labels:</tspan></text>
+    <text x="60" y="418"><tspan class="plain">        </tspan><tspan class="hl">app: nginx</tspan></text>
+    <text x="60" y="440"><tspan class="plain">    </tspan><tspan class="key">spec:</tspan></text>
+    <text x="60" y="462"><tspan class="plain">      </tspan><tspan class="key">containers:</tspan></text>
+    <text x="60" y="484"><tspan class="plain">      - </tspan><tspan class="key">name:</tspan><tspan class="val"> nginx</tspan></text>
+    <text x="60" y="506"><tspan class="plain">        </tspan><tspan class="key">image:</tspan><tspan class="val"> nginx:latest</tspan></text>
+    <text x="60" y="528"><tspan class="plain">        </tspan><tspan class="key">ports:</tspan></text>
+    <text x="60" y="550"><tspan class="plain">        - </tspan><tspan class="key">containerPort:</tspan><tspan class="val"> 80</tspan></text>
+  </g>
+
+  <!-- ReplicaSet controller box (right top) -->
+  <g filter="url(#rsoft)">
+    <rect x="470" y="105" width="390" height="120" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="2.5"/>
+  </g>
+  <rect x="470" y="105" width="390" height="36" rx="12" fill="#8b5cf6"/>
+  <rect x="470" y="123" width="390" height="18" fill="#8b5cf6"/>
+  <text x="665" y="129" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle">ReplicaSet: nginx-replicaset</text>
+  <text x="665" y="166" class="small" text-anchor="middle" font-weight="700" fill="#5b21b6">desired: 3   ·   selector: app=nginx</text>
+  <rect x="500" y="182" width="330" height="30" rx="15" fill="#f5f3ff" stroke="#ddd6fe"/>
+  <text x="665" y="202" class="tiny" text-anchor="middle" fill="#6d28d9" font-weight="600">🔁 loop: count pods with app=nginx → fix gap</text>
+
+  <!-- 3 pods -->
+  <g filter="url(#rsoft)">
+    <rect x="470" y="270" width="115" height="120" rx="12" fill="#ffffff" stroke="#6ee7b7" stroke-width="2"/>
+  </g>
+  <rect x="470" y="270" width="115" height="30" rx="12" fill="#10b981"/>
+  <rect x="470" y="285" width="115" height="15" fill="#10b981"/>
+  <text x="527" y="290" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Pod 1</text>
+  <rect x="484" y="310" width="87" height="20" rx="10" fill="#fce7f3"/>
+  <text x="527" y="324" class="tiny" text-anchor="middle" fill="#be185d" font-weight="700">app: nginx</text>
+  <rect x="484" y="338" width="87" height="38" rx="6" fill="#d1fae5"/>
+  <text x="527" y="361" class="tiny" text-anchor="middle" fill="#065f46">nginx :80</text>
+
+  <g filter="url(#rsoft)">
+    <rect x="607" y="270" width="115" height="120" rx="12" fill="#ffffff" stroke="#6ee7b7" stroke-width="2"/>
+  </g>
+  <rect x="607" y="270" width="115" height="30" rx="12" fill="#10b981"/>
+  <rect x="607" y="285" width="115" height="15" fill="#10b981"/>
+  <text x="664" y="290" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Pod 2</text>
+  <rect x="621" y="310" width="87" height="20" rx="10" fill="#fce7f3"/>
+  <text x="664" y="324" class="tiny" text-anchor="middle" fill="#be185d" font-weight="700">app: nginx</text>
+  <rect x="621" y="338" width="87" height="38" rx="6" fill="#d1fae5"/>
+  <text x="664" y="361" class="tiny" text-anchor="middle" fill="#065f46">nginx :80</text>
+
+  <g filter="url(#rsoft)">
+    <rect x="744" y="270" width="115" height="120" rx="12" fill="#ffffff" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4"/>
+  </g>
+  <rect x="744" y="270" width="115" height="30" rx="12" fill="#ef4444"/>
+  <rect x="744" y="285" width="115" height="15" fill="#ef4444"/>
+  <text x="801" y="290" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Pod 3 💥</text>
+  <text x="801" y="335" class="tiny" text-anchor="middle" fill="#b91c1c" font-weight="700">crashed!</text>
+  <text x="801" y="355" class="tiny" text-anchor="middle" fill="#b91c1c">2 ≠ 3 …</text>
+
+  <!-- replacement pod -->
+  <g filter="url(#rsoft)">
+    <rect x="744" y="430" width="115" height="110" rx="12" fill="#ffffff" stroke="#6ee7b7" stroke-width="2"/>
+  </g>
+  <rect x="744" y="430" width="115" height="30" rx="12" fill="#10b981"/>
+  <rect x="744" y="445" width="115" height="15" fill="#10b981"/>
+  <text x="801" y="450" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Pod 3′ ✨</text>
+  <rect x="758" y="468" width="87" height="20" rx="10" fill="#fce7f3"/>
+  <text x="801" y="482" class="tiny" text-anchor="middle" fill="#be185d" font-weight="700">app: nginx</text>
+  <rect x="758" y="496" width="87" height="34" rx="6" fill="#d1fae5"/>
+  <text x="801" y="517" class="tiny" text-anchor="middle" fill="#065f46">recreated</text>
+
+  <!-- arrows RS -> pods -->
+  <g stroke="#8b5cf6" stroke-width="2" fill="none">
+    <path d="M560 227 C 540 245, 530 255, 527 266" marker-end="url(#rarr)"/>
+    <path d="M665 227 L 665 266" marker-end="url(#rarr)"/>
+    <path d="M770 227 C 790 245, 798 255, 801 266" marker-end="url(#rarr)"/>
+    <path d="M860 340 C 885 380, 885 400, 862 470" marker-end="url(#rarr)" stroke-dasharray="5 4"/>
+  </g>
+  <text x="893" y="410" class="tiny" fill="#7c3aed" font-weight="700" text-anchor="end" transform="rotate(0)">heal</text>
+
+  <!-- selector explanation strip -->
+  <rect x="470" y="430" width="250" height="110" rx="10" fill="#fdf2f8" stroke="#fbcfe8"/>
+  <text x="595" y="456" class="small" text-anchor="middle" font-weight="700" fill="#9d174d">How does it know its pods?</text>
+  <text x="595" y="478" class="tiny" text-anchor="middle" fill="#831843">The selector (app: nginx) must match</text>
+  <text x="595" y="494" class="tiny" text-anchor="middle" fill="#831843">the labels in the pod template.</text>
+  <text x="595" y="516" class="tiny" text-anchor="middle" fill="#831843">Labels are the glue — not names.</text>
+
+  <text x="40" y="595" class="tiny" fill="#6b7280">The template section is a full pod manifest embedded inside — the ReplicaSet stamps out copies of it.</text>
+</svg>

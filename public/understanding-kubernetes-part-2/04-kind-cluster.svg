@@ -1,0 +1,93 @@
+<svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .node-label { font-size: 15px; font-weight: 700; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="ksoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="540" fill="#ffffff"/>
+
+  <!-- Header -->
+  <text x="40" y="46" class="title">Kind: a Kubernetes Cluster in Docker</text>
+  <text x="40" y="68" class="subtitle">Each "node" is just a Docker container running on your laptop — no VMs, no cloud</text>
+
+  <!-- Your machine boundary -->
+  <rect x="30" y="88" width="840" height="420" rx="16" fill="#fafaf9" stroke="#a8a29e" stroke-width="2"/>
+  <text x="52" y="114" class="badge" fill="#78716c">💻 YOUR MACHINE</text>
+
+  <!-- Docker boundary -->
+  <rect x="52" y="130" width="796" height="300" rx="12" fill="#eff6ff" stroke="#1d63ed" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="74" y="156" class="badge" fill="#1d63ed">🐳 DOCKER ENGINE</text>
+
+  <!-- Control plane container -->
+  <g filter="url(#ksoft)">
+    <rect x="80" y="180" width="230" height="220" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="80" y="180" width="230" height="38" rx="12" fill="#326CE5"/>
+  <rect x="80" y="199" width="230" height="19" fill="#326CE5"/>
+  <text x="195" y="205" class="node-label" fill="#ffffff" text-anchor="middle">Control Plane Node</text>
+  <rect x="98" y="230" width="194" height="24" rx="12" fill="#dbeafe"/>
+  <text x="195" y="246" class="tiny" text-anchor="middle" fill="#1d63ed" font-weight="700">docker container #1</text>
+  <g>
+    <rect x="98" y="266" width="194" height="30" rx="6" fill="#ffffff" stroke="#c7d7f5"/>
+    <text x="195" y="286" class="tiny" text-anchor="middle" font-weight="600" fill="#1e3a5f">API server · etcd</text>
+    <rect x="98" y="304" width="194" height="30" rx="6" fill="#ffffff" stroke="#c7d7f5"/>
+    <text x="195" y="324" class="tiny" text-anchor="middle" font-weight="600" fill="#1e3a5f">scheduler · controllers</text>
+    <rect x="98" y="342" width="194" height="30" rx="6" fill="#ffffff" stroke="#c7d7f5"/>
+    <text x="195" y="362" class="tiny" text-anchor="middle" font-weight="600" fill="#1e3a5f">kubelet · runtime</text>
+  </g>
+
+  <!-- Worker 1 container -->
+  <g filter="url(#ksoft)">
+    <rect x="340" y="180" width="230" height="220" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="340" y="180" width="230" height="38" rx="12" fill="#10b981"/>
+  <rect x="340" y="199" width="230" height="19" fill="#10b981"/>
+  <text x="455" y="205" class="node-label" fill="#ffffff" text-anchor="middle">Worker Node 1</text>
+  <rect x="358" y="230" width="194" height="24" rx="12" fill="#dbeafe"/>
+  <text x="455" y="246" class="tiny" text-anchor="middle" fill="#1d63ed" font-weight="700">docker container #2</text>
+  <g>
+    <rect x="358" y="266" width="194" height="30" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+    <text x="455" y="286" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kubelet · runtime</text>
+    <rect x="358" y="304" width="194" height="68" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+    <text x="455" y="326" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">your pods run here</text>
+    <rect x="374" y="336" width="76" height="26" rx="5" fill="#d1fae5"/>
+    <text x="412" y="353" class="tiny" text-anchor="middle" fill="#065f46">pod</text>
+    <rect x="460" y="336" width="76" height="26" rx="5" fill="#d1fae5"/>
+    <text x="498" y="353" class="tiny" text-anchor="middle" fill="#065f46">pod</text>
+  </g>
+
+  <!-- Worker 2 container -->
+  <g filter="url(#ksoft)">
+    <rect x="600" y="180" width="230" height="220" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="600" y="180" width="230" height="38" rx="12" fill="#10b981"/>
+  <rect x="600" y="199" width="230" height="19" fill="#10b981"/>
+  <text x="715" y="205" class="node-label" fill="#ffffff" text-anchor="middle">Worker Node 2</text>
+  <rect x="618" y="230" width="194" height="24" rx="12" fill="#dbeafe"/>
+  <text x="715" y="246" class="tiny" text-anchor="middle" fill="#1d63ed" font-weight="700">docker container #3</text>
+  <g>
+    <rect x="618" y="266" width="194" height="30" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+    <text x="715" y="286" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kubelet · runtime</text>
+    <rect x="618" y="304" width="194" height="68" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+    <text x="715" y="326" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">your pods run here</text>
+    <rect x="634" y="336" width="76" height="26" rx="5" fill="#d1fae5"/>
+    <text x="672" y="353" class="tiny" text-anchor="middle" fill="#065f46">pod</text>
+    <rect x="720" y="336" width="76" height="26" rx="5" fill="#d1fae5"/>
+    <text x="758" y="353" class="tiny" text-anchor="middle" fill="#065f46">pod</text>
+  </g>
+
+  <!-- terminal strip -->
+  <rect x="52" y="448" width="796" height="44" rx="8" fill="#1e293b"/>
+  <text x="72" y="475" class="mono" fill="#4ade80">$ kind create cluster --config cluster.yaml</text>
+  <text x="500" y="475" class="mono" fill="#94a3b8">→ 3 containers appear in `docker ps`</text>
+</svg>

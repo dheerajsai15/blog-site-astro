@@ -1,0 +1,89 @@
+<svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .node-label { font-size: 15px; font-weight: 700; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="csoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="cblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" fill="#ffffff"/>
+
+  <!-- Header -->
+  <text x="40" y="46" class="title">ClusterIP: Reachable Only Inside the Cluster</text>
+  <text x="40" y="68" class="subtitle">A stable internal IP and DNS name for your database — with no road in from the internet</text>
+
+  <!-- The internet (blocked) -->
+  <g filter="url(#csoft)">
+    <rect x="40" y="210" width="150" height="70" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  </g>
+  <text x="115" y="240" class="small" text-anchor="middle" font-weight="700">🌍 The internet</text>
+  <text x="115" y="260" class="tiny" text-anchor="middle" fill="#92400e">wants your data</text>
+
+  <!-- blocked arrow -->
+  <line x1="190" y1="245" x2="248" y2="245" stroke="#ef4444" stroke-width="3" stroke-dasharray="7 5"/>
+  <circle cx="252" cy="245" r="16" fill="#ffffff" stroke="#ef4444" stroke-width="3"/>
+  <line x1="242" y1="235" x2="262" y2="255" stroke="#ef4444" stroke-width="3"/>
+  <line x1="262" y1="235" x2="242" y2="255" stroke="#ef4444" stroke-width="3"/>
+  <text x="220" y="200" font-size="11" text-anchor="middle" fill="#ef4444" font-weight="700">no route in</text>
+
+  <!-- Cluster boundary -->
+  <rect x="270" y="96" width="600" height="360" rx="16" fill="#fafaf9" stroke="#a8a29e" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="292" y="124" class="badge" fill="#78716c">☸️ YOUR CLUSTER</text>
+
+  <!-- api pods -->
+  <g filter="url(#csoft)">
+    <rect x="300" y="160" width="130" height="60" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="365" y="186" class="small" text-anchor="middle" font-weight="700" fill="#065f46">api pod</text>
+  <text x="365" y="206" class="tiny" text-anchor="middle" fill="#065f46">needs the DB</text>
+  <g filter="url(#csoft)">
+    <rect x="300" y="280" width="130" height="60" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="365" y="306" class="small" text-anchor="middle" font-weight="700" fill="#065f46">api pod</text>
+  <text x="365" y="326" class="tiny" text-anchor="middle" fill="#065f46">needs the DB</text>
+
+  <!-- arrows api -> service -->
+  <path d="M 430 194 C 460 210, 470 220, 486 234" fill="none" stroke="#326CE5" stroke-width="2" marker-end="url(#cblue)"/>
+  <path d="M 430 306 C 460 290, 470 280, 486 266" fill="none" stroke="#326CE5" stroke-width="2" marker-end="url(#cblue)"/>
+
+  <!-- ClusterIP service -->
+  <g filter="url(#csoft)">
+    <rect x="490" y="190" width="200" height="120" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="490" y="190" width="200" height="34" rx="12" fill="#326CE5"/>
+  <rect x="490" y="207" width="200" height="17" fill="#326CE5"/>
+  <text x="590" y="213" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Service: db</text>
+  <text x="590" y="248" class="tiny" text-anchor="middle" font-weight="700" fill="#1e3a5f">type: ClusterIP</text>
+  <text x="590" y="270" class="mono" text-anchor="middle" fill="#1e3a5f" font-size="11">10.245.241.130:5432</text>
+  <text x="590" y="292" class="tiny" text-anchor="middle" fill="#6b7280">virtual IP — internal only</text>
+
+  <!-- arrow service -> postgres -->
+  <path d="M 690 250 L 726 250" fill="none" stroke="#326CE5" stroke-width="2" marker-end="url(#cblue)"/>
+
+  <!-- postgres pod -->
+  <g filter="url(#csoft)">
+    <rect x="730" y="216" width="116" height="68" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="788" y="244" class="small" text-anchor="middle" font-weight="700" fill="#065f46">postgres pod</text>
+  <text x="788" y="266" class="mono" text-anchor="middle" fill="#065f46" font-size="11">:5432</text>
+
+  <!-- DNS strip inside cluster -->
+  <rect x="300" y="372" width="546" height="60" rx="8" fill="#1e293b"/>
+  <text x="320" y="397" class="mono" fill="#4ade80">db.default.svc.cluster.local  →  10.245.241.130</text>
+  <text x="320" y="419" class="mono" fill="#94a3b8" font-size="11">&lt;service&gt;.&lt;namespace&gt;.svc.cluster.local — every service gets a DNS name</text>
+
+  <!-- caption strip -->
+  <rect x="40" y="484" width="830" height="44" rx="8" fill="#eaf1fd" stroke="#326CE5"/>
+  <text x="455" y="511" class="small" text-anchor="middle" fill="#1e3a5f" font-weight="600">ClusterIP is the default Service type — NodePort and LoadBalancer are built on top of it</text>
+</svg>

@@ -1,0 +1,106 @@
+<svg viewBox="0 0 900 660" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .node-label { font-size: 15px; font-weight: 700; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="lsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="larrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+    <marker id="lblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#0080FF"/>
+    </marker>
+    <marker id="lgreen" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="660" fill="#ffffff"/>
+
+  <!-- Header -->
+  <text x="40" y="46" class="title">LoadBalancer: One IP in Front of Everything</text>
+  <text x="40" y="68" class="subtitle">Kubernetes asks the cloud provider to create a real load balancer — a separate, billed resource outside the cluster</text>
+
+  <!-- The internet / you -->
+  <g filter="url(#lsoft)">
+    <rect x="340" y="92" width="220" height="56" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  </g>
+  <text x="450" y="115" class="small" text-anchor="middle" font-weight="700">🌍 The internet (you)</text>
+  <text x="450" y="135" class="mono" text-anchor="middle" fill="#92400e">http://164.90.243.88</text>
+
+  <!-- arrow internet -> LB -->
+  <path d="M 450 148 L 450 184" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#larrow)"/>
+
+  <!-- Load balancer -->
+  <g filter="url(#lsoft)">
+    <rect x="290" y="190" width="320" height="96" rx="12" fill="#0080FF"/>
+  </g>
+  <text x="450" y="222" class="node-label" fill="#ffffff" text-anchor="middle">DigitalOcean Load Balancer</text>
+  <text x="450" y="244" class="mono" text-anchor="middle" fill="#dbeafe">public IP: 164.90.243.88</text>
+  <text x="450" y="268" font-size="11" text-anchor="middle" fill="#dbeafe">a real cloud resource — created for you, billed to you 💰</text>
+
+  <!-- arrows LB -> nodes -->
+  <path d="M 350 286 C 280 320, 230 340, 195 372" fill="none" stroke="#0080FF" stroke-width="2" marker-end="url(#lblue)"/>
+  <path d="M 450 286 L 450 372" fill="none" stroke="#0080FF" stroke-width="2" marker-end="url(#lblue)"/>
+  <path d="M 550 286 C 620 320, 670 340, 705 372" fill="none" stroke="#0080FF" stroke-width="2" marker-end="url(#lblue)"/>
+
+  <!-- Cluster boundary -->
+  <rect x="40" y="340" width="820" height="230" rx="16" fill="#fafaf9" stroke="#a8a29e" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="62" y="366" class="badge" fill="#78716c">☸️ YOUR CLUSTER</text>
+
+  <!-- Node 1 -->
+  <g filter="url(#lsoft)">
+    <rect x="80" y="382" width="220" height="160" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="80" y="382" width="220" height="34" rx="12" fill="#10b981"/>
+  <rect x="80" y="399" width="220" height="17" fill="#10b981"/>
+  <text x="190" y="405" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 1</text>
+  <rect x="98" y="428" width="184" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="190" y="445" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kube-proxy · nodeport</text>
+  <rect x="98" y="466" width="184" height="60" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-dasharray="5 4"/>
+  <text x="190" y="500" class="tiny" text-anchor="middle" fill="#9ca3af">forwards to the pod →</text>
+
+  <!-- Node 2 (has pod) -->
+  <g filter="url(#lsoft)">
+    <rect x="340" y="382" width="220" height="160" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="340" y="382" width="220" height="34" rx="12" fill="#10b981"/>
+  <rect x="340" y="399" width="220" height="17" fill="#10b981"/>
+  <text x="450" y="405" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 2</text>
+  <rect x="358" y="428" width="184" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="450" y="445" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kube-proxy · nodeport</text>
+  <g filter="url(#lsoft)">
+    <rect x="378" y="466" width="144" height="60" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="450" y="492" class="small" text-anchor="middle" font-weight="700" fill="#065f46">nginx pod</text>
+  <text x="450" y="512" class="mono" text-anchor="middle" fill="#065f46" font-size="11">app=nginx · :80</text>
+
+  <!-- Node 3 -->
+  <g filter="url(#lsoft)">
+    <rect x="600" y="382" width="220" height="160" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="600" y="382" width="220" height="34" rx="12" fill="#10b981"/>
+  <rect x="600" y="399" width="220" height="17" fill="#10b981"/>
+  <text x="710" y="405" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 3</text>
+  <rect x="618" y="428" width="184" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="710" y="445" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kube-proxy · nodeport</text>
+  <rect x="618" y="466" width="184" height="60" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-dasharray="5 4"/>
+  <text x="710" y="500" class="tiny" text-anchor="middle" fill="#9ca3af">← forwards to the pod</text>
+
+  <!-- forwarding arrows between nodes -->
+  <path d="M 300 496 C 330 496, 340 496, 374 496" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#lgreen)"/>
+  <path d="M 600 496 C 570 496, 560 496, 526 496" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#lgreen)"/>
+
+  <!-- warning strip -->
+  <rect x="40" y="592" width="820" height="48" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="450" y="614" class="small" text-anchor="middle" font-weight="700" fill="#92400e">⚠️ The load balancer lives OUTSIDE the cluster and is billed separately.</text>
+  <text x="450" y="632" class="tiny" text-anchor="middle" fill="#92400e">If you delete the cluster but forget the LB, you keep paying for it. Delete the Service first, or check your control panel.</text>
+</svg>

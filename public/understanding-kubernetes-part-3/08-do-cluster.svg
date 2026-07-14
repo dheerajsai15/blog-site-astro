@@ -1,0 +1,114 @@
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .node-label { font-size: 15px; font-weight: 700; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="dsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="darrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="600" fill="#ffffff"/>
+
+  <!-- Header -->
+  <text x="40" y="46" class="title">From Kind to a Real Cloud Cluster</text>
+  <text x="40" y="68" class="subtitle">Same Kubernetes, but the nodes are now real machines with real public IPs</text>
+
+  <!-- Your machine -->
+  <rect x="30" y="120" width="230" height="230" rx="16" fill="#fafaf9" stroke="#a8a29e" stroke-width="2"/>
+  <text x="52" y="148" class="badge" fill="#78716c">💻 YOUR MACHINE</text>
+  <g filter="url(#dsoft)">
+    <rect x="52" y="170" width="186" height="60" rx="10" fill="#ffffff" stroke="#a8a29e"/>
+  </g>
+  <text x="145" y="196" class="small" text-anchor="middle" font-weight="700">kubectl</text>
+  <text x="145" y="216" class="tiny" text-anchor="middle">same tool as Part 2</text>
+  <g filter="url(#dsoft)">
+    <rect x="52" y="250" width="186" height="76" rx="10" fill="#fffbeb" stroke="#f59e0b"/>
+  </g>
+  <text x="145" y="276" class="mono" text-anchor="middle" fill="#92400e">~/.kube/config</text>
+  <text x="145" y="296" class="tiny" text-anchor="middle">cluster address +</text>
+  <text x="145" y="312" class="tiny" text-anchor="middle">credentials (from DO)</text>
+
+  <!-- DigitalOcean boundary -->
+  <rect x="300" y="100" width="570" height="400" rx="16" fill="#f0f9ff" stroke="#0080FF" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="322" y="128" class="badge" fill="#0080FF">🌊 DIGITALOCEAN (or any cloud provider)</text>
+
+  <!-- arrow laptop -> control plane (drawn on top of the boundary) -->
+  <path d="M 260 200 C 300 200, 296 190, 326 190" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#darrow)"/>
+  <text x="293" y="164" class="tiny" text-anchor="middle" fill="#64748b" font-weight="600">authenticated</text>
+  <text x="293" y="178" class="tiny" text-anchor="middle" fill="#64748b" font-weight="600">HTTPS</text>
+
+  <!-- Managed control plane -->
+  <g filter="url(#dsoft)">
+    <rect x="330" y="150" width="510" height="80" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <text x="585" y="180" class="node-label" fill="#1e3a5f" text-anchor="middle">Managed Control Plane</text>
+  <text x="585" y="200" class="tiny" text-anchor="middle" fill="#1e3a5f">API server · etcd · scheduler · controllers</text>
+  <text x="585" y="217" class="tiny" text-anchor="middle" fill="#6b7280">run for you by the provider — it never shows up in `kubectl get nodes`</text>
+
+  <!-- Worker droplets -->
+  <!-- Worker 1 -->
+  <g filter="url(#dsoft)">
+    <rect x="330" y="260" width="156" height="200" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="330" y="260" width="156" height="36" rx="12" fill="#10b981"/>
+  <rect x="330" y="278" width="156" height="18" fill="#10b981"/>
+  <text x="408" y="284" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 1</text>
+  <rect x="344" y="308" width="128" height="24" rx="12" fill="#dbeafe"/>
+  <text x="408" y="324" class="tiny" text-anchor="middle" fill="#1d63ed" font-weight="700">a real VM (droplet)</text>
+  <rect x="344" y="342" width="128" height="40" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="408" y="359" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">public IP</text>
+  <text x="408" y="375" class="mono" text-anchor="middle" fill="#065f46" font-size="11">144.126.254.17</text>
+  <rect x="344" y="392" width="128" height="28" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="408" y="410" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kubelet · runtime</text>
+  <rect x="344" y="428" width="128" height="22" rx="5" fill="#d1fae5"/>
+  <text x="408" y="443" class="tiny" text-anchor="middle" fill="#065f46">your pods run here</text>
+
+  <!-- Worker 2 -->
+  <g filter="url(#dsoft)">
+    <rect x="507" y="260" width="156" height="200" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="507" y="260" width="156" height="36" rx="12" fill="#10b981"/>
+  <rect x="507" y="278" width="156" height="18" fill="#10b981"/>
+  <text x="585" y="284" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 2</text>
+  <rect x="521" y="308" width="128" height="24" rx="12" fill="#dbeafe"/>
+  <text x="585" y="324" class="tiny" text-anchor="middle" fill="#1d63ed" font-weight="700">a real VM (droplet)</text>
+  <rect x="521" y="342" width="128" height="40" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="585" y="359" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">public IP</text>
+  <text x="585" y="375" class="mono" text-anchor="middle" fill="#065f46" font-size="11">144.126.249.85</text>
+  <rect x="521" y="392" width="128" height="28" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="585" y="410" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kubelet · runtime</text>
+  <rect x="521" y="428" width="128" height="22" rx="5" fill="#d1fae5"/>
+  <text x="585" y="443" class="tiny" text-anchor="middle" fill="#065f46">your pods run here</text>
+
+  <!-- Worker 3 -->
+  <g filter="url(#dsoft)">
+    <rect x="684" y="260" width="156" height="200" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="684" y="260" width="156" height="36" rx="12" fill="#10b981"/>
+  <rect x="684" y="278" width="156" height="18" fill="#10b981"/>
+  <text x="762" y="284" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 3</text>
+  <rect x="698" y="308" width="128" height="24" rx="12" fill="#dbeafe"/>
+  <text x="762" y="324" class="tiny" text-anchor="middle" fill="#1d63ed" font-weight="700">a real VM (droplet)</text>
+  <rect x="698" y="342" width="128" height="40" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="762" y="359" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">public IP</text>
+  <text x="762" y="375" class="mono" text-anchor="middle" fill="#065f46" font-size="11">144.126.251.30</text>
+  <rect x="698" y="392" width="128" height="28" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="762" y="410" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kubelet · runtime</text>
+  <rect x="698" y="428" width="128" height="22" rx="5" fill="#d1fae5"/>
+  <text x="762" y="443" class="tiny" text-anchor="middle" fill="#065f46">your pods run here</text>
+
+  <!-- terminal strip -->
+  <rect x="30" y="528" width="840" height="44" rx="8" fill="#1e293b"/>
+  <text x="50" y="555" class="mono" fill="#4ade80">$ kubectl get nodes</text>
+  <text x="330" y="555" class="mono" fill="#94a3b8">→ 3 real machines, each with its own public IP</text>
+</svg>

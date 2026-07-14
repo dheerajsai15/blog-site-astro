@@ -1,0 +1,104 @@
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .node-label { font-size: 15px; font-weight: 700; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="nsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="narrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+    <marker id="ngreen" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="620" fill="#ffffff"/>
+
+  <!-- Header -->
+  <text x="40" y="46" class="title">NodePort: the Same Port Opens on Every Node</text>
+  <text x="40" y="68" class="subtitle">Hit port 30080 on ANY node's public IP — the request always ends up at the nginx pod</text>
+
+  <!-- The internet / you -->
+  <g filter="url(#nsoft)">
+    <rect x="330" y="96" width="240" height="60" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  </g>
+  <text x="450" y="121" class="small" text-anchor="middle" font-weight="700">🌍 The internet (you)</text>
+  <text x="450" y="141" class="mono" text-anchor="middle" fill="#92400e">curl http://&lt;any-node-ip&gt;:30080</text>
+
+  <!-- arrows to port badges -->
+  <path d="M 380 156 C 300 190, 220 210, 180 252" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#narrow)"/>
+  <path d="M 450 156 L 450 252" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#narrow)"/>
+  <path d="M 520 156 C 600 190, 680 210, 720 252" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#narrow)"/>
+
+  <!-- Worker Node 1 -->
+  <g filter="url(#nsoft)">
+    <rect x="60" y="286" width="240" height="230" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="60" y="286" width="240" height="36" rx="12" fill="#10b981"/>
+  <rect x="60" y="304" width="240" height="18" fill="#10b981"/>
+  <text x="180" y="310" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 1</text>
+  <rect x="80" y="334" width="200" height="26" rx="13" fill="#dbeafe"/>
+  <text x="180" y="351" class="mono" text-anchor="middle" fill="#1d63ed" font-size="11">public IP: 144.126.254.17</text>
+  <rect x="80" y="372" width="200" height="30" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="180" y="391" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kube-proxy listens on :30080</text>
+  <rect x="80" y="414" width="200" height="80" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-dasharray="5 4"/>
+  <text x="180" y="450" class="tiny" text-anchor="middle" fill="#9ca3af">no nginx pod here —</text>
+  <text x="180" y="468" class="tiny" text-anchor="middle" fill="#9ca3af">request gets forwarded →</text>
+
+  <!-- Worker Node 2 (has the pod) -->
+  <g filter="url(#nsoft)">
+    <rect x="330" y="286" width="240" height="230" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="330" y="286" width="240" height="36" rx="12" fill="#10b981"/>
+  <rect x="330" y="304" width="240" height="18" fill="#10b981"/>
+  <text x="450" y="310" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 2</text>
+  <rect x="350" y="334" width="200" height="26" rx="13" fill="#dbeafe"/>
+  <text x="450" y="351" class="mono" text-anchor="middle" fill="#1d63ed" font-size="11">public IP: 144.126.249.85</text>
+  <rect x="350" y="372" width="200" height="30" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="450" y="391" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kube-proxy listens on :30080</text>
+  <g filter="url(#nsoft)">
+    <rect x="370" y="414" width="160" height="80" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="450" y="448" class="small" text-anchor="middle" font-weight="700" fill="#065f46">nginx pod</text>
+  <text x="450" y="470" class="mono" text-anchor="middle" fill="#065f46" font-size="11">app=nginx · :80</text>
+
+  <!-- Worker Node 3 -->
+  <g filter="url(#nsoft)">
+    <rect x="600" y="286" width="240" height="230" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="600" y="286" width="240" height="36" rx="12" fill="#10b981"/>
+  <rect x="600" y="304" width="240" height="18" fill="#10b981"/>
+  <text x="720" y="310" class="node-label" fill="#ffffff" text-anchor="middle" font-size="14">Worker Node 3</text>
+  <rect x="620" y="334" width="200" height="26" rx="13" fill="#dbeafe"/>
+  <text x="720" y="351" class="mono" text-anchor="middle" fill="#1d63ed" font-size="11">public IP: 144.126.251.30</text>
+  <rect x="620" y="372" width="200" height="30" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="720" y="391" class="tiny" text-anchor="middle" font-weight="600" fill="#065f46">kube-proxy listens on :30080</text>
+  <rect x="620" y="414" width="200" height="80" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-dasharray="5 4"/>
+  <text x="720" y="450" class="tiny" text-anchor="middle" fill="#9ca3af">no nginx pod here —</text>
+  <text x="720" y="468" class="tiny" text-anchor="middle" fill="#9ca3af">← request gets forwarded</text>
+
+  <!-- port badges (drawn after nodes so they sit on top) -->
+  <rect x="140" y="262" width="80" height="26" rx="13" fill="#f59e0b"/>
+  <text x="180" y="280" class="badge" fill="#ffffff" text-anchor="middle" font-size="12">:30080</text>
+  <rect x="410" y="262" width="80" height="26" rx="13" fill="#f59e0b"/>
+  <text x="450" y="280" class="badge" fill="#ffffff" text-anchor="middle" font-size="12">:30080</text>
+  <rect x="680" y="262" width="80" height="26" rx="13" fill="#f59e0b"/>
+  <text x="720" y="280" class="badge" fill="#ffffff" text-anchor="middle" font-size="12">:30080</text>
+
+  <!-- forwarding arrows between nodes -->
+  <path d="M 280 454 C 320 454, 330 454, 366 454" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ngreen)"/>
+  <path d="M 620 454 C 580 454, 570 454, 534 454" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ngreen)"/>
+
+  <!-- terminal strip -->
+  <rect x="40" y="548" width="820" height="44" rx="8" fill="#1e293b"/>
+  <text x="60" y="575" class="mono" fill="#4ade80">$ curl http://144.126.254.17:30080</text>
+  <text x="400" y="575" class="mono" fill="#94a3b8">→ "Welcome to nginx!" — works with all 3 node IPs</text>
+</svg>

@@ -269,4 +269,4 @@ We covered a lot of ground, and it all stacks neatly:
 
 When you're done experimenting, `kind delete cluster --name learning` cleans everything up.
 
-There's one obvious gap: we have 3 nginx servers running, but no way to actually visit them in a browser — pod IPs are internal to the cluster, and they change every time a pod is replaced. In Part 3 we'll fix that with **Services** — how to expose pods, and how networking in Kubernetes actually works.
+There's one obvious gap: we have 3 nginx servers running, but no way to actually visit them in a browser — pod IPs are internal to the cluster, and they change every time a pod is replaced. In [Part 3](/blog/understanding-kubernetes-part-3) we'll fix that with **Services** — how to expose pods, and how networking in Kubernetes actually works.

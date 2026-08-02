@@ -299,4 +299,4 @@ kubectl delete pod nginx postgres
 
 Then destroy the cluster in the DigitalOcean control panel, and double-check the **Load Balancers** page is empty.
 
-One question is left hanging: with LoadBalancer, every service you expose costs you a load balancer. Ten public services, ten LBs, ten bills? That can't be how real clusters work — and it isn't. In Part 4 we'll look at **Ingress**: how to put many services behind a single load balancer, with routing by domain and path.
+One question is left hanging: with LoadBalancer, every service you expose costs you a load balancer. Ten public services, ten LBs, ten bills? That can't be how real clusters work — and it isn't. In [Part 4](/blog/understanding-kubernetes-part-4) we'll look at **Ingress**: how to put many services behind a single load balancer, with routing by domain and path.

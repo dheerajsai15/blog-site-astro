@@ -1,0 +1,87 @@
+<svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .node-label { font-size: 15px; font-weight: 700; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="isoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="igray" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+    <marker id="iblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="580" fill="#ffffff"/>
+
+  <!-- Header -->
+  <text x="40" y="46" class="title">Ingress vs. Ingress Controller</text>
+  <text x="40" y="68" class="subtitle">The Ingress is a rule written down. The controller is the thing that actually enforces it.</text>
+
+  <!-- Stage 1: you -->
+  <g filter="url(#isoft)">
+    <rect x="40" y="104" width="232" height="132" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <rect x="40" y="104" width="232" height="30" rx="12" fill="#64748b"/>
+  <rect x="40" y="119" width="232" height="15" fill="#64748b"/>
+  <text x="156" y="125" class="badge" fill="#ffffff" text-anchor="middle">1 · YOU APPLY A RULE</text>
+  <text x="58" y="156" class="mono" fill="#334155" font-size="11">kind: Ingress</text>
+  <text x="58" y="176" class="mono" fill="#334155" font-size="11">host: shop.example.com</text>
+  <text x="58" y="196" class="mono" fill="#334155" font-size="11">path: /one → app-one</text>
+  <text x="156" y="222" class="tiny" text-anchor="middle" fill="#94a3b8">kubectl apply -f ingress.yaml</text>
+
+  <path d="M 272 170 L 316 170" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#igray)"/>
+
+  <!-- Stage 2: API server -->
+  <g filter="url(#isoft)">
+    <rect x="320" y="104" width="232" height="132" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="320" y="104" width="232" height="30" rx="12" fill="#326CE5"/>
+  <rect x="320" y="119" width="232" height="15" fill="#326CE5"/>
+  <text x="436" y="125" class="badge" fill="#ffffff" text-anchor="middle">2 · IT IS STORED IN etcd</text>
+  <text x="436" y="162" class="small" text-anchor="middle" font-weight="700" fill="#1e3a5f">API server accepts it</text>
+  <text x="436" y="186" class="tiny" text-anchor="middle" fill="#1e3a5f">The desired state is now recorded…</text>
+  <text x="436" y="212" class="small" text-anchor="middle" font-weight="700" fill="#b91c1c">…and nothing routes yet.</text>
+
+  <path d="M 552 170 L 606 170" fill="none" stroke="#326CE5" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#iblue)"/>
+  <text x="579" y="158" class="tiny" text-anchor="middle" fill="#326CE5">watches</text>
+
+  <!-- Stage 3: controller -->
+  <g filter="url(#isoft)">
+    <rect x="610" y="104" width="250" height="132" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="610" y="104" width="250" height="30" rx="12" fill="#10b981"/>
+  <rect x="610" y="119" width="250" height="15" fill="#10b981"/>
+  <text x="735" y="125" class="badge" fill="#ffffff" text-anchor="middle">3 · THE CONTROLLER NOTICES</text>
+  <text x="735" y="162" class="small" text-anchor="middle" font-weight="700" fill="#065f46">ingress-nginx-controller pod</text>
+  <text x="735" y="186" class="tiny" text-anchor="middle" fill="#065f46">a real nginx running in your cluster,</text>
+  <text x="735" y="204" class="tiny" text-anchor="middle" fill="#065f46">subscribed to Ingress objects</text>
+  <text x="735" y="224" class="tiny" text-anchor="middle" fill="#059669" font-weight="700">you must install this yourself</text>
+
+  <!-- arrow down to config -->
+  <path d="M 700 236 C 690 268, 700 276, 668 292" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#iblue)"/>
+  <text x="724" y="270" class="tiny" fill="#059669" font-weight="600">regenerates + reloads</text>
+
+  <!-- generated nginx.conf -->
+  <rect x="180" y="286" width="480" height="170" rx="10" fill="#1e293b"/>
+  <text x="200" y="312" class="mono" fill="#94a3b8" font-size="11"># /etc/nginx/nginx.conf — written by the controller</text>
+  <text x="200" y="340" class="mono" fill="#4ade80">server {</text>
+  <text x="216" y="362" class="mono" fill="#4ade80">server_name shop.example.com;</text>
+  <text x="216" y="384" class="mono" fill="#4ade80">location /one {</text>
+  <text x="232" y="406" class="mono" fill="#4ade80">proxy_pass http://app-one-pods;</text>
+  <text x="216" y="428" class="mono" fill="#4ade80">}</text>
+  <text x="200" y="448" class="mono" fill="#4ade80">}</text>
+
+  <!-- caption -->
+  <rect x="40" y="486" width="820" height="66" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="450" y="512" class="small" text-anchor="middle" font-weight="700" fill="#92400e">An Ingress object with no controller installed is a note nobody reads.</text>
+  <text x="450" y="534" class="tiny" text-anchor="middle" fill="#92400e">kubectl will happily accept it, report no errors — and your traffic will go nowhere.</text>
+</svg>

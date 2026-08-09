@@ -1,0 +1,106 @@
+<svg viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .mono12 { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; }
+    </style>
+    <filter id="fsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="fblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="famber" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#d97706"/>
+    </marker>
+    <marker id="fgreen" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="640" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">How a value reaches your code</text>
+  <text x="40" y="68" class="subtitle">Two objects, one reference in the pod spec, and the value lands in process.env.</text>
+
+  <!-- ConfigMap source -->
+  <g filter="url(#fsoft)">
+    <rect x="40" y="96" width="270" height="136" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="40" y="96" width="270" height="28" rx="12" fill="#326CE5"/>
+  <rect x="40" y="110" width="270" height="14" fill="#326CE5"/>
+  <text x="175" y="116" class="badge" fill="#ffffff" text-anchor="middle">CONFIGMAP · backend-config</text>
+  <text x="58" y="148" class="mono" fill="#1e3a5f">data:</text>
+  <text x="72" y="170" class="mono" fill="#1e3a5f">PORT: "5000"</text>
+  <text x="72" y="190" class="mono" fill="#1e3a5f">APP_NAME: "billing-api"</text>
+  <text x="72" y="210" class="mono" fill="#1e3a5f">LOG_LEVEL: "debug"</text>
+
+  <!-- Secret source -->
+  <g filter="url(#fsoft)">
+    <rect x="40" y="248" width="270" height="120" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  </g>
+  <rect x="40" y="248" width="270" height="28" rx="12" fill="#d97706"/>
+  <rect x="40" y="262" width="270" height="14" fill="#d97706"/>
+  <text x="175" y="268" class="badge" fill="#ffffff" text-anchor="middle">SECRET · backend-secret</text>
+  <text x="58" y="300" class="mono" fill="#78350f">data:</text>
+  <text x="72" y="322" class="mono" fill="#78350f">DATABASE_URL:</text>
+  <text x="86" y="342" class="mono" fill="#92400e">cG9zdGdyZXM6Ly9hcHB1…</text>
+  <text x="175" y="360" class="tiny" text-anchor="middle" fill="#92400e">base64, not encrypted</text>
+
+  <!-- arrows into deployment -->
+  <path d="M 310 164 C 350 164, 350 250, 388 250" fill="none" stroke="#326CE5" stroke-width="2" marker-end="url(#fblue)"/>
+  <path d="M 310 308 C 350 308, 350 292, 388 292" fill="none" stroke="#d97706" stroke-width="2" marker-end="url(#famber)"/>
+
+  <!-- Deployment pod spec -->
+  <g filter="url(#fsoft)">
+    <rect x="392" y="176" width="308" height="190" rx="12" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+  </g>
+  <rect x="392" y="176" width="308" height="28" rx="12" fill="#64748b"/>
+  <rect x="392" y="190" width="308" height="14" fill="#64748b"/>
+  <text x="546" y="196" class="badge" fill="#ffffff" text-anchor="middle">DEPLOYMENT · pod template</text>
+  <text x="408" y="228" class="mono" fill="#334155">containers:</text>
+  <text x="422" y="248" class="mono" fill="#334155">- image: test-kub:v1</text>
+  <text x="436" y="270" class="mono" fill="#1d4ed8">envFrom:</text>
+  <text x="450" y="290" class="mono" fill="#1d4ed8">- configMapRef:</text>
+  <text x="478" y="308" class="mono" fill="#1d4ed8">name: backend-config</text>
+  <text x="450" y="328" class="mono" fill="#b45309">- secretRef:</text>
+  <text x="478" y="346" class="mono" fill="#b45309">name: backend-secret</text>
+
+  <text x="546" y="392" class="tiny" text-anchor="middle" fill="#64748b">the pod spec only names the objects —</text>
+  <text x="546" y="409" class="tiny" text-anchor="middle" fill="#64748b">it never contains the values themselves</text>
+
+  <!-- arrow to container -->
+  <path d="M 700 262 L 748 262" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#fgreen)"/>
+  <text x="724" y="250" class="tiny" text-anchor="middle" fill="#059669">kubelet</text>
+
+  <!-- container env -->
+  <g filter="url(#fsoft)">
+    <rect x="752" y="176" width="108" height="190" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="752" y="176" width="108" height="28" rx="12" fill="#10b981"/>
+  <rect x="752" y="190" width="108" height="14" fill="#10b981"/>
+  <text x="806" y="196" class="badge" fill="#ffffff" text-anchor="middle">CONTAINER</text>
+  <text x="806" y="228" class="tiny" text-anchor="middle" fill="#065f46" font-weight="700">environment</text>
+  <text x="806" y="256" class="mono" text-anchor="middle" fill="#065f46">PORT</text>
+  <text x="806" y="278" class="mono" text-anchor="middle" fill="#065f46">APP_NAME</text>
+  <text x="806" y="300" class="mono" text-anchor="middle" fill="#065f46">LOG_LEVEL</text>
+  <text x="806" y="322" class="mono" text-anchor="middle" fill="#065f46">DATABASE_URL</text>
+  <text x="806" y="350" class="tiny" text-anchor="middle" fill="#059669">set at start</text>
+
+  <!-- app output -->
+  <rect x="180" y="430" width="540" height="120" rx="10" fill="#1e293b"/>
+  <text x="200" y="456" class="mono" fill="#94a3b8"># the app just reads them — it knows nothing about Kubernetes</text>
+  <text x="200" y="482" class="mono12" fill="#4ade80">console.log(process.env.DATABASE_URL)</text>
+  <text x="200" y="504" class="mono12" fill="#4ade80">console.log(process.env.PORT)</text>
+  <text x="200" y="530" class="mono12" fill="#facc15">→ postgres://appuser:s3cr3t@db:5432/appdb</text>
+
+  <!-- caption -->
+  <rect x="40" y="568" width="820" height="54" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="450" y="592" class="small" text-anchor="middle" font-weight="700" fill="#334155">The container image has no idea any of this happened.</text>
+  <text x="450" y="612" class="tiny" text-anchor="middle" fill="#475569">To your code these are ordinary environment variables — exactly what it would read from a .env file on a laptop.</text>
+</svg>

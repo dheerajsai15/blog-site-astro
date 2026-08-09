@@ -1,0 +1,87 @@
+<svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+    </style>
+    <filter id="vsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="vgray" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+    <marker id="vgreen" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#10b981"/>
+    </marker>
+    <marker id="vred" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">Two ways in, and only one of them updates</text>
+  <text x="40" y="68" class="subtitle">You edit the Secret. What happens next depends entirely on how the pod consumes it.</text>
+
+  <!-- the edit -->
+  <g filter="url(#vsoft)">
+    <rect x="330" y="96" width="240" height="62" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  </g>
+  <text x="450" y="122" class="small" text-anchor="middle" font-weight="700" fill="#78350f">You rotate the password</text>
+  <text x="450" y="144" class="mono" text-anchor="middle" fill="#92400e">kubectl patch secret …</text>
+
+  <path d="M 400 158 C 380 190, 300 190, 250 214" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#vred)"/>
+  <path d="M 500 158 C 520 190, 600 190, 650 214" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#vgreen)"/>
+
+  <!-- LEFT: env var -->
+  <g filter="url(#vsoft)">
+    <rect x="40" y="218" width="380" height="200" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <rect x="40" y="218" width="380" height="30" rx="12" fill="#dc2626"/>
+  <rect x="40" y="233" width="380" height="15" fill="#dc2626"/>
+  <text x="230" y="239" class="badge" fill="#ffffff" text-anchor="middle">CONSUMED AS AN ENV VAR</text>
+
+  <text x="58" y="272" class="mono" fill="#7f1d1d">envFrom:</text>
+  <text x="72" y="292" class="mono" fill="#7f1d1d">- secretRef:</text>
+  <text x="100" y="310" class="mono" fill="#7f1d1d">name: backend-secret</text>
+
+  <line x1="58" y1="326" x2="402" y2="326" stroke="#fca5a5" stroke-width="1.5"/>
+
+  <text x="58" y="350" class="tiny" fill="#7f1d1d" font-weight="700">The environment is handed to the process</text>
+  <text x="58" y="367" class="tiny" fill="#7f1d1d" font-weight="700">exactly once, when the container starts.</text>
+  <text x="58" y="392" class="mono" fill="#b91c1c">printenv DATABASE_URL</text>
+  <text x="58" y="410" class="mono" fill="#b91c1c">→ …s3cr3t…   still the old value</text>
+
+  <!-- RIGHT: volume -->
+  <g filter="url(#vsoft)">
+    <rect x="480" y="218" width="380" height="200" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <rect x="480" y="218" width="380" height="30" rx="12" fill="#10b981"/>
+  <rect x="480" y="233" width="380" height="15" fill="#10b981"/>
+  <text x="670" y="239" class="badge" fill="#ffffff" text-anchor="middle">CONSUMED AS A MOUNTED FILE</text>
+
+  <text x="498" y="272" class="mono" fill="#065f46">volumes:</text>
+  <text x="512" y="292" class="mono" fill="#065f46">- secret:</text>
+  <text x="540" y="310" class="mono" fill="#065f46">secretName: backend-secret</text>
+
+  <line x1="498" y1="326" x2="842" y2="326" stroke="#6ee7b7" stroke-width="1.5"/>
+
+  <text x="498" y="350" class="tiny" fill="#065f46" font-weight="700">The kubelet keeps the mount in sync and</text>
+  <text x="498" y="367" class="tiny" fill="#065f46" font-weight="700">swaps the file in place, within a minute.</text>
+  <text x="498" y="392" class="mono" fill="#047857">cat /app/secrets/DATABASE_URL</text>
+  <text x="498" y="410" class="mono" fill="#047857">→ …ROTATED…   the new value</text>
+
+  <!-- same pod bar -->
+  <rect x="150" y="440" width="600" height="42" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="450" y="459" class="small" text-anchor="middle" font-weight="700" fill="#334155">Both readings above come from the same running pod.</text>
+  <text x="450" y="476" class="tiny" text-anchor="middle" fill="#475569">RESTARTS: 0 — nothing was recreated, and the two values disagree.</text>
+
+  <!-- caption -->
+  <rect x="40" y="496" width="820" height="48" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="450" y="518" class="small" text-anchor="middle" font-weight="700" fill="#92400e">Env vars are a snapshot. Files are a live view — if your app bothers to re-read them.</text>
+  <text x="450" y="537" class="tiny" text-anchor="middle" fill="#92400e">Most apps read config once at boot, so the honest fix after any change is still: kubectl rollout restart deployment/backend</text>
+</svg>

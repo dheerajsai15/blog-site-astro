@@ -1,0 +1,125 @@
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .step { font-size: 12px; font-weight: 700; fill: #ffffff; }
+    </style>
+    <filter id="dsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="dblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="dred" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="620" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">Dynamic provisioning, and the wall it hits</text>
+  <text x="40" y="68" class="subtitle">One PVC creates a real cloud disk — which exactly one node may hold at a time.</text>
+
+  <!-- step 1 -->
+  <g filter="url(#dsoft)">
+    <rect x="40" y="96" width="252" height="118" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  </g>
+  <circle cx="62" cy="118" r="12" fill="#7c3aed"/>
+  <text x="62" y="122" class="step" text-anchor="middle">1</text>
+  <text x="84" y="122" class="badge" fill="#5b21b6">YOU APPLY A PVC</text>
+  <text x="58" y="150" class="mono" fill="#6d28d9">kind: PersistentVolumeClaim</text>
+  <text x="58" y="168" class="mono" fill="#6d28d9">storageClassName:</text>
+  <text x="58" y="182" class="mono" fill="#6d28d9">  do-block-storage</text>
+  <text x="58" y="200" class="mono" fill="#6d28d9">storage: 5Gi · RWO</text>
+
+  <line x1="300" y1="155" x2="336" y2="155" stroke="#326CE5" stroke-width="2.5" marker-end="url(#dblue)"/>
+
+  <!-- step 2 -->
+  <g filter="url(#dsoft)">
+    <rect x="344" y="96" width="252" height="118" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <circle cx="366" cy="118" r="12" fill="#326CE5"/>
+  <text x="366" y="122" class="step" text-anchor="middle">2</text>
+  <text x="388" y="122" class="badge" fill="#1e3a5f">STORAGECLASS NAMES A DRIVER</text>
+  <text x="362" y="150" class="mono" fill="#1d4ed8">provisioner:</text>
+  <text x="362" y="164" class="mono" fill="#1d4ed8">  dobs.csi.digitalocean.com</text>
+  <text x="362" y="184" class="mono" fill="#1d4ed8">reclaimPolicy: Delete</text>
+  <text x="362" y="202" class="tiny" fill="#326CE5">a CSI pod in your cluster, watching</text>
+
+  <line x1="604" y1="155" x2="640" y2="155" stroke="#326CE5" stroke-width="2.5" marker-end="url(#dblue)"/>
+
+  <!-- step 3 -->
+  <g filter="url(#dsoft)">
+    <rect x="648" y="96" width="212" height="118" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <circle cx="670" cy="118" r="12" fill="#10b981"/>
+  <text x="670" y="122" class="step" text-anchor="middle">3</text>
+  <text x="692" y="122" class="badge" fill="#065f46">CLOUD API CALL</text>
+  <text x="666" y="150" class="tiny" fill="#047857">DigitalOcean creates a real</text>
+  <text x="666" y="166" class="tiny" fill="#047857">5Gi block device, and the</text>
+  <text x="666" y="182" class="tiny" fill="#047857">driver writes a matching PV</text>
+  <text x="666" y="202" class="mono" fill="#047857">pvc-8c3d9a41-…</text>
+
+  <!-- step 4 header -->
+  <line x1="754" y1="222" x2="754" y2="258" stroke="#326CE5" stroke-width="2.5" marker-end="url(#dblue)"/>
+  <circle cx="62" cy="286" r="12" fill="#326CE5"/>
+  <text x="62" y="290" class="step" text-anchor="middle">4</text>
+  <text x="84" y="290" class="badge" fill="#1e3a5f">THE VOLUME ATTACHES TO ONE NODE — AND ONLY ONE</text>
+
+  <!-- cluster row -->
+  <rect x="40" y="304" width="820" height="180" rx="14" fill="#f8fbff" stroke="#326CE5" stroke-width="2" stroke-dasharray="6 4"/>
+
+  <!-- node A -->
+  <g filter="url(#dsoft)">
+    <rect x="64" y="326" width="230" height="136" rx="10" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="179" y="350" class="badge" text-anchor="middle" fill="#065f46">NODE · cd5nq</text>
+  <rect x="82" y="362" width="194" height="52" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="179" y="382" class="small" text-anchor="middle" font-weight="700" fill="#065f46">writer-9wqcs</text>
+  <text x="179" y="400" class="tiny" text-anchor="middle" fill="#047857">1/1 Running — mounted /data</text>
+  <text x="179" y="436" class="tiny" text-anchor="middle" fill="#047857">volume attached · formatted · mounted</text>
+  <text x="179" y="452" class="tiny" text-anchor="middle" fill="#64748b">by the CSI driver, not by your container</text>
+
+  <!-- volume -->
+  <g filter="url(#dsoft)">
+    <rect x="330" y="336" width="180" height="116" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  </g>
+  <text x="420" y="362" class="badge" text-anchor="middle" fill="#065f46">DO BLOCK VOLUME</text>
+  <text x="420" y="384" class="mono" text-anchor="middle" fill="#047857">5Gi · ext4</text>
+  <text x="420" y="408" class="tiny" text-anchor="middle" fill="#047857">exclusively attached</text>
+  <text x="420" y="424" class="tiny" text-anchor="middle" fill="#047857">to cd5nq</text>
+  <text x="420" y="444" class="tiny" text-anchor="middle" fill="#64748b">billed by the hour</text>
+
+  <line x1="302" y1="394" x2="322" y2="394" stroke="#10b981" stroke-width="3"/>
+  <line x1="518" y1="394" x2="600" y2="394" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#dred)"/>
+  <text x="560" y="384" class="tiny" text-anchor="middle" fill="#b91c1c">refused</text>
+
+  <!-- node B -->
+  <g filter="url(#dsoft)">
+    <rect x="608" y="326" width="230" height="136" rx="10" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <text x="723" y="350" class="badge" text-anchor="middle" fill="#b91c1c">NODE · cd5nr</text>
+  <rect x="626" y="362" width="194" height="52" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="723" y="382" class="small" text-anchor="middle" font-weight="700" fill="#7f1d1d">writer-lz2mk</text>
+  <text x="723" y="400" class="tiny" text-anchor="middle" fill="#b91c1c">0/1 ContainerCreating — stuck</text>
+  <text x="723" y="436" class="mono" text-anchor="middle" fill="#dc2626">Multi-Attach error</text>
+  <text x="723" y="452" class="tiny" text-anchor="middle" fill="#b91c1c">a block device has one host at a time</text>
+
+  <!-- comparison -->
+  <rect x="40" y="504" width="400" height="96" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="60" y="530" class="badge" fill="#92400e">NFS / MANAGED FILE STORAGE</text>
+  <text x="60" y="552" class="tiny" fill="#b45309">ReadWriteMany — many nodes, all writing at once</text>
+  <text x="60" y="570" class="tiny" fill="#b45309">Slower, and someone has to run the server</text>
+  <text x="60" y="588" class="tiny" fill="#b45309">Provisioned by hand: a PV you wrote yourself</text>
+
+  <rect x="460" y="504" width="400" height="96" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="480" y="530" class="badge" fill="#065f46">CLOUD BLOCK STORAGE</text>
+  <text x="480" y="552" class="tiny" fill="#047857">ReadWriteOnce — one node at a time, no exceptions</text>
+  <text x="480" y="570" class="tiny" fill="#047857">Fast, durable, replicated by the provider</text>
+  <text x="480" y="588" class="tiny" fill="#047857">Provisioned on demand: the PVC is the whole request</text>
+</svg>

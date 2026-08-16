@@ -1,0 +1,105 @@
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+    </style>
+    <filter id="bsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="bblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="bpurple" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="bslate" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="600" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">The claim check: PVC and PV</text>
+  <text x="40" y="68" class="subtitle">The pod asks for storage. Something else decides what that storage is.</text>
+
+  <!-- who writes what -->
+  <text x="40" y="106" class="badge" fill="#7c3aed">WRITTEN BY THE APP TEAM · NAMESPACED</text>
+  <text x="530" y="106" class="badge" fill="#326CE5">WRITTEN BY WHOEVER RUNS THE CLUSTER · CLUSTER-SCOPED</text>
+
+  <!-- POD -->
+  <g filter="url(#bsoft)">
+    <rect x="40" y="120" width="300" height="128" rx="12" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+  </g>
+  <rect x="40" y="120" width="300" height="26" rx="12" fill="#7c3aed"/>
+  <rect x="40" y="134" width="300" height="12" fill="#7c3aed"/>
+  <text x="190" y="138" class="badge" fill="#ffffff" text-anchor="middle">POD · writer</text>
+  <text x="58" y="168" class="mono" fill="#4c1d95">volumeMounts:</text>
+  <text x="72" y="186" class="mono" fill="#4c1d95">- mountPath: /data</text>
+  <text x="58" y="210" class="mono" fill="#4c1d95">volumes:</text>
+  <text x="72" y="228" class="mono" fill="#6d28d9">- persistentVolumeClaim:</text>
+  <text x="86" y="242" class="mono" fill="#6d28d9">claimName: nfs-pvc</text>
+
+  <line x1="190" y1="256" x2="190" y2="292" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#bpurple)"/>
+  <text x="204" y="278" class="tiny" fill="#6d28d9">mounts the claim, never the volume</text>
+
+  <!-- PVC -->
+  <g filter="url(#bsoft)">
+    <rect x="40" y="302" width="300" height="150" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  </g>
+  <rect x="40" y="302" width="300" height="26" rx="12" fill="#7c3aed"/>
+  <rect x="40" y="316" width="300" height="12" fill="#7c3aed"/>
+  <text x="190" y="320" class="badge" fill="#ffffff" text-anchor="middle">PERSISTENTVOLUMECLAIM · nfs-pvc</text>
+  <text x="58" y="350" class="small" font-weight="700" fill="#4c1d95">"I need storage like this"</text>
+  <text x="58" y="374" class="mono" fill="#6d28d9">accessModes: [ReadWriteMany]</text>
+  <text x="58" y="392" class="mono" fill="#6d28d9">resources.requests.storage: 2Gi</text>
+  <text x="58" y="410" class="mono" fill="#6d28d9">storageClassName: nfs</text>
+  <text x="58" y="436" class="tiny" fill="#7c3aed">No server. No path. No PV name.</text>
+
+  <!-- BINDING -->
+  <line x1="348" y1="366" x2="516" y2="366" stroke="#64748b" stroke-width="2.5" marker-end="url(#bslate)"/>
+  <line x1="516" y1="386" x2="348" y2="386" stroke="#64748b" stroke-width="2.5" marker-end="url(#bslate)"/>
+  <rect x="368" y="316" width="128" height="38" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="432" y="333" class="badge" text-anchor="middle" fill="#334155">BOUND</text>
+  <text x="432" y="348" class="tiny" text-anchor="middle" fill="#64748b">one-to-one, exclusive</text>
+  <text x="432" y="412" class="tiny" text-anchor="middle" fill="#64748b">size + access mode</text>
+  <text x="432" y="428" class="tiny" text-anchor="middle" fill="#64748b">must satisfy the claim</text>
+
+  <!-- PV -->
+  <g filter="url(#bsoft)">
+    <rect x="524" y="302" width="336" height="150" rx="12" fill="#eaf1fd" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="524" y="302" width="336" height="26" rx="12" fill="#326CE5"/>
+  <rect x="524" y="316" width="336" height="12" fill="#326CE5"/>
+  <text x="692" y="320" class="badge" fill="#ffffff" text-anchor="middle">PERSISTENTVOLUME · nfs-pv</text>
+  <text x="542" y="350" class="small" font-weight="700" fill="#1e3a5f">"here is storage that exists"</text>
+  <text x="542" y="374" class="mono" fill="#1d4ed8">capacity.storage: 5Gi</text>
+  <text x="542" y="392" class="mono" fill="#1d4ed8">accessModes: [ReadWriteMany]</text>
+  <text x="542" y="410" class="mono" fill="#1d4ed8">nfs.server: 52.66.197.168</text>
+  <text x="542" y="428" class="mono" fill="#1d4ed8">nfs.path: /exports</text>
+
+  <line x1="692" y1="256" x2="692" y2="292" stroke="#326CE5" stroke-width="2.5" marker-end="url(#bblue)"/>
+  <text x="706" y="278" class="tiny" fill="#1d4ed8">describes storage that already exists</text>
+
+  <!-- REAL STORAGE -->
+  <g filter="url(#bsoft)">
+    <rect x="524" y="120" width="336" height="128" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  </g>
+  <text x="692" y="150" class="badge" text-anchor="middle" fill="#334155">REAL STORAGE, OUTSIDE THE CLUSTER</text>
+  <rect x="546" y="166" width="136" height="62" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="614" y="190" class="small" text-anchor="middle" font-weight="700" fill="#334155">NFS export</text>
+  <text x="614" y="210" class="tiny" text-anchor="middle" fill="#64748b">a container on EC2</text>
+  <rect x="702" y="166" width="136" height="62" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="770" y="190" class="small" text-anchor="middle" font-weight="700" fill="#334155">cloud volume</text>
+  <text x="770" y="210" class="tiny" text-anchor="middle" fill="#64748b">a real block device</text>
+  <text x="692" y="242" class="tiny" text-anchor="middle" fill="#64748b">swap one for the other without touching the pod spec</text>
+
+  <rect x="40" y="486" width="820" height="72" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="60" y="512" class="small" font-weight="700" fill="#334155">Two ways a PV comes to exist</text>
+  <text x="60" y="532" class="tiny" fill="#4b5563">STATIC — a human creates the storage and writes the PV. That is the NFS half of this post.</text>
+  <text x="60" y="548" class="tiny" fill="#4b5563">DYNAMIC — the PVC alone triggers the cluster to create both the storage and the PV. That is the DigitalOcean half.</text>
+</svg>

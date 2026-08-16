@@ -657,4 +657,4 @@ Or just delete the cluster, since it's only Kind — no cloud bill waiting for y
 kind delete cluster --name k8s-part5
 ```
 
-That's configuration handled. The other half of what we flagged at the end of Part 4 is still open, and it's the bigger one: **every pod we've built has been disposable.** The postgres pod from Part 3 would lose its entire database the moment it was rescheduled, which is a slightly awkward property for a database. In the next post we'll fix that with **volumes, PersistentVolumes, and PersistentVolumeClaims**.
+That's configuration handled. The other half of what we flagged at the end of Part 4 is still open, and it's the bigger one: **every pod we've built has been disposable.** The postgres pod from Part 3 would lose its entire database the moment it was rescheduled, which is a slightly awkward property for a database. [Part 6](/blog/understanding-kubernetes-part-6) fixes that with **volumes, PersistentVolumes, and PersistentVolumeClaims**.

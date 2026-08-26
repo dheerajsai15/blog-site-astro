@@ -1,0 +1,117 @@
+<svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .step { font-size: 12px; font-weight: 700; fill: #ffffff; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .formula { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; font-weight: 700; fill: #5b21b6; }
+    </style>
+    <filter id="hsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="hpurple" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="hblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="580" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">The loop, every 15 seconds</text>
+  <text x="40" y="68" class="subtitle">The HPA measures, divides, rounds up, and writes one integer. That is all it does.</text>
+
+  <!-- ===== step 1 ===== -->
+  <g filter="url(#hsoft)">
+    <rect x="40" y="100" width="196" height="112" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  </g>
+  <circle cx="62" cy="122" r="12" fill="#0d9488"/>
+  <text x="62" y="126" class="step" text-anchor="middle">1</text>
+  <text x="84" y="126" class="badge" fill="#0f766e">READ</text>
+  <text x="58" y="152" class="mono" fill="#134e4a">metrics.k8s.io</text>
+  <text x="58" y="174" class="tiny" fill="#0f766e">CPU of every ready pod</text>
+  <text x="58" y="192" class="tiny" fill="#0f766e">matching the selector, averaged</text>
+
+  <line x1="240" y1="156" x2="286" y2="156" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#hpurple)"/>
+
+  <!-- ===== step 2 ===== -->
+  <g filter="url(#hsoft)">
+    <rect x="292" y="100" width="216" height="112" rx="12" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+  </g>
+  <circle cx="314" cy="122" r="12" fill="#7c3aed"/>
+  <text x="314" y="126" class="step" text-anchor="middle">2</text>
+  <text x="336" y="126" class="badge" fill="#6d28d9">DIVIDE BY THE REQUEST</text>
+  <text x="310" y="154" class="mono" fill="#4c1d95">94m used / 200m request = 47%</text>
+  <text x="310" y="178" class="tiny" fill="#6d28d9">Utilization is a % of requests.cpu.</text>
+  <text x="310" y="194" class="tiny" fill="#6d28d9">Not of the node, not of the limit.</text>
+
+  <line x1="512" y1="156" x2="558" y2="156" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#hpurple)"/>
+
+  <!-- ===== step 3 ===== -->
+  <g filter="url(#hsoft)">
+    <rect x="564" y="100" width="296" height="112" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  </g>
+  <circle cx="586" cy="122" r="12" fill="#7c3aed"/>
+  <text x="586" y="126" class="step" text-anchor="middle">3</text>
+  <text x="608" y="126" class="badge" fill="#6d28d9">APPLY THE FORMULA</text>
+  <text x="582" y="158" class="formula">ceil( replicas × current / target )</text>
+  <text x="582" y="182" class="tiny" fill="#6d28d9">then clamp to [minReplicas, maxReplicas]</text>
+  <text x="582" y="198" class="tiny" fill="#6d28d9">ratio within 0.9–1.1 → do nothing (10% tolerance)</text>
+
+  <!-- ===== step 4 ===== -->
+  <path d="M712 216 L712 258" stroke="#326CE5" stroke-width="2.5" fill="none" marker-end="url(#hblue)"/>
+  <text x="724" y="242" class="tiny" fill="#1e40af">writes one field</text>
+
+  <g filter="url(#hsoft)">
+    <rect x="564" y="264" width="296" height="86" rx="12" fill="#eff6ff" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <circle cx="586" cy="288" r="12" fill="#326CE5"/>
+  <text x="586" y="292" class="step" text-anchor="middle">4</text>
+  <text x="608" y="292" class="badge" fill="#1e40af">PATCH THE DEPLOYMENT</text>
+  <text x="582" y="322" class="mono" fill="#1e3a8a">spec.replicas: 2  →  4</text>
+  <text x="582" y="340" class="tiny" fill="#1d4ed8">The HPA's only write. Everything after this is Part 2.</text>
+
+  <!-- downstream -->
+  <path d="M712 354 L712 388" stroke="#326CE5" stroke-width="2.5" fill="none" marker-end="url(#hblue)"/>
+
+  <g filter="url(#hsoft)">
+    <rect x="564" y="394" width="296" height="62" rx="10" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  </g>
+  <text x="582" y="418" class="badge" fill="#1e40af">Deployment → ReplicaSet → pods → scheduler</text>
+  <text x="582" y="440" class="tiny" fill="#64748b">Nothing downstream knows an autoscaler is involved.</text>
+
+  <!-- feedback arrow -->
+  <path d="M564 425 L550 425 L550 232 L138 232 L138 218" stroke="#7c3aed" stroke-width="2.5" fill="none" stroke-dasharray="6 4" marker-end="url(#hpurple)"/>
+  <text x="168" y="252" class="tiny" fill="#6d28d9">more pods → the same load spread wider → measure again in 15s</text>
+
+  <!-- worked example -->
+  <g filter="url(#hsoft)">
+    <rect x="40" y="264" width="496" height="192" rx="12" fill="#fafafa" stroke="#d4d4d8" stroke-width="2"/>
+  </g>
+  <text x="60" y="292" class="badge" fill="#334155">A SATURATED WORKLOAD CONVERGING · target 50%</text>
+
+  <text x="60" y="322" class="mono" fill="#475569">2 pods</text>
+  <rect x="128" y="310" width="150" height="16" rx="3" fill="#ef4444"/>
+  <text x="288" y="323" class="mono" fill="#334155">100%  →  ceil(2 × 100/50) = 4</text>
+
+  <text x="60" y="356" class="mono" fill="#475569">4 pods</text>
+  <rect x="128" y="344" width="141" height="16" rx="3" fill="#f97316"/>
+  <rect x="269" y="344" width="9" height="16" rx="3" fill="#f1f5f9" stroke="#e2e8f0"/>
+  <text x="288" y="357" class="mono" fill="#334155">94%   →  ceil(4 × 94/50)  = 8</text>
+
+  <text x="60" y="390" class="mono" fill="#475569">8 pods</text>
+  <rect x="128" y="378" width="71" height="16" rx="3" fill="#22c55e"/>
+  <rect x="199" y="378" width="79" height="16" rx="3" fill="#f1f5f9" stroke="#e2e8f0"/>
+  <text x="288" y="391" class="mono" fill="#334155">47%   →  ceil(8 × 47/50)  = 8  ✓</text>
+
+  <text x="60" y="424" class="tiny" fill="#64748b">While every pod is pinned at its limit, the measurement understates real demand.</text>
+  <text x="60" y="442" class="tiny" fill="#64748b">The HPA can only find the right number by adding pods and measuring again.</text>
+
+  <text x="40" y="500" class="small" fill="#334155">No <tspan class="mono" fill="#1e40af">requests.cpu</tspan> on the container means no denominator in step 2.</text>
+  <text x="40" y="520" class="small" fill="#334155">The HPA reports <tspan class="mono" fill="#b91c1c">&lt;unknown&gt;/50%</tspan> and never scales anything.</text>
+</svg>

@@ -1,0 +1,99 @@
+<svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .axis { font-size: 10px; fill: #94a3b8; }
+    </style>
+    <filter id="tsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="tred" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="540" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">Up fast, down slow, on purpose</text>
+  <text x="40" y="68" class="subtitle">Scaling up late costs an outage. Scaling down late costs a few minutes of a spare pod.</text>
+
+  <!-- stabilization shading -->
+  <rect x="470" y="180" width="308" height="240" fill="#fff7ed"/>
+  <line x1="778" y1="180" x2="778" y2="430" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="624" y="120" class="badge" fill="#b45309" text-anchor="middle">DOWNSCALE STABILIZATION WINDOW · 5 min</text>
+  <text x="624" y="136" class="tiny" fill="#b45309" text-anchor="middle">the HPA takes the HIGHEST recommendation made across the window</text>
+  <path d="M470,146 L470,154 L778,154 L778,146" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+
+  <!-- gridlines -->
+  <line x1="100" y1="200" x2="840" y2="200" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="100" y1="244" x2="840" y2="244" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="100" y1="332" x2="840" y2="332" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="100" y1="376" x2="840" y2="376" stroke="#f1f5f9" stroke-width="1"/>
+
+  <!-- axes -->
+  <line x1="100" y1="180" x2="100" y2="430" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="100" y1="430" x2="840" y2="430" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <text x="92" y="204" class="axis" text-anchor="end">10</text>
+  <text x="92" y="248" class="axis" text-anchor="end">8</text>
+  <text x="92" y="336" class="axis" text-anchor="end">4</text>
+  <text x="92" y="380" class="axis" text-anchor="end">2</text>
+  <text x="60" y="164" class="badge" fill="#326CE5">REPLICAS</text>
+
+  <!-- maxReplicas / minReplicas -->
+  <line x1="100" y1="200" x2="840" y2="200" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="110" y="194" class="tiny" fill="#64748b">maxReplicas 10</text>
+  <line x1="100" y1="376" x2="840" y2="376" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="110" y="370" class="tiny" fill="#64748b">minReplicas 2</text>
+
+  <!-- utilization line -->
+  <path d="M100,418 L223,418 L232,250 L288,250 L296,262 L320,262 L330,340 L470,340 L480,413 L840,413"
+        fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="5 3"/>
+  <path d="M322,296 L322,268" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="330" y="300" class="tiny" fill="#7e22ce">94% at 4 pods</text>
+  <text x="352" y="334" class="tiny" fill="#7e22ce">47%, on target. Tolerance absorbs the rest</text>
+  <path d="M296,220 L268,244" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="302" y="224" class="tiny" fill="#7e22ce">100%. Every pod pinned at its limit</text>
+
+  <!-- replica step line -->
+  <path d="M100,376 L254,376 L254,332 L285,332 L285,244 L778,244 L778,376 L840,376"
+        fill="none" stroke="#326CE5" stroke-width="3"/>
+  <circle cx="254" cy="332" r="4" fill="#326CE5"/>
+  <circle cx="285" cy="244" r="4" fill="#326CE5"/>
+  <circle cx="778" cy="376" r="4" fill="#326CE5"/>
+
+  <!-- load markers -->
+  <line x1="223" y1="180" x2="223" y2="430" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="228" y="176" class="badge" fill="#b91c1c">load on</text>
+  <line x1="470" y1="180" x2="470" y2="430" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="474" y="176" class="badge" fill="#b91c1c">load off</text>
+
+  <!-- x axis labels -->
+  <text x="100" y="446" class="axis" text-anchor="middle">0</text>
+  <text x="223" y="446" class="axis" text-anchor="middle">2m</text>
+  <text x="347" y="446" class="axis" text-anchor="middle">4m</text>
+  <text x="470" y="446" class="axis" text-anchor="middle">6m</text>
+  <text x="594" y="446" class="axis" text-anchor="middle">8m</text>
+  <text x="717" y="446" class="axis" text-anchor="middle">10m</text>
+  <text x="840" y="446" class="axis" text-anchor="middle">12m</text>
+
+  <!-- callouts -->
+  <text x="262" y="360" class="tiny" fill="#1e40af">2 → 4</text>
+  <text x="300" y="272" class="tiny" fill="#1e40af">4 → 8 · 15s later</text>
+  <text x="770" y="300" class="tiny" fill="#1e40af" text-anchor="end">8 → 2, in one step</text>
+
+  <!-- legend -->
+  <line x1="620" y1="470" x2="650" y2="470" stroke="#326CE5" stroke-width="3"/>
+  <text x="658" y="474" class="tiny" fill="#334155">replicas</text>
+  <line x1="720" y1="470" x2="750" y2="470" stroke="#a855f7" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="758" y="474" class="tiny" fill="#334155">CPU utilization</text>
+
+  <text x="40" y="474" class="small" fill="#334155">Scale-up: no stabilization window, and up to 100% more pods every 15s.</text>
+  <text x="40" y="494" class="small" fill="#334155">Scale-down: 5 minutes of quiet first, then at most 50% removed per minute.</text>
+  <text x="40" y="518" class="tiny" fill="#94a3b8">Both ends are the defaults, and both are overridable under spec.behavior.</text>
+</svg>

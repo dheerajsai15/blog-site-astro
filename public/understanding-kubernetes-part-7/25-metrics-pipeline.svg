@@ -1,0 +1,122 @@
+<svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+    </style>
+    <filter id="msoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="mblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="mteal" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#0d9488"/>
+    </marker>
+    <marker id="mslate" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">How a cgroup counter becomes a Kubernetes API</text>
+  <text x="40" y="68" class="subtitle">Every node already knows. metrics-server is what gets it to the control plane.</text>
+
+  <!-- ============ NODES ============ -->
+  <text x="40" y="106" class="badge" fill="#64748b">ON EVERY NODE</text>
+
+  <g filter="url(#msoft)">
+    <rect x="40" y="120" width="228" height="150" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  </g>
+  <rect x="40" y="120" width="228" height="24" rx="12" fill="#64748b"/>
+  <rect x="40" y="133" width="228" height="11" fill="#64748b"/>
+  <text x="154" y="137" class="badge" fill="#ffffff" text-anchor="middle">WORKER NODE</text>
+
+  <rect x="58" y="156" width="88" height="42" rx="7" fill="#e2e8f0" stroke="#94a3b8"/>
+  <text x="102" y="173" class="tiny" fill="#334155" text-anchor="middle">container</text>
+  <text x="102" y="189" class="mono" fill="#475569" text-anchor="middle">cgroup</text>
+
+  <rect x="160" y="156" width="90" height="42" rx="7" fill="#e2e8f0" stroke="#94a3b8"/>
+  <text x="205" y="173" class="tiny" fill="#334155" text-anchor="middle">container</text>
+  <text x="205" y="189" class="mono" fill="#475569" text-anchor="middle">cgroup</text>
+
+  <line x1="102" y1="202" x2="102" y2="216" stroke="#64748b" stroke-width="2" marker-end="url(#mslate)"/>
+  <line x1="205" y1="202" x2="205" y2="216" stroke="#64748b" stroke-width="2" marker-end="url(#mslate)"/>
+
+  <rect x="58" y="220" width="192" height="36" rx="7" fill="#dbeafe" stroke="#326CE5" stroke-width="1.5"/>
+  <text x="154" y="236" class="badge" fill="#1e40af" text-anchor="middle">kubelet + cAdvisor</text>
+  <text x="154" y="250" class="mono" fill="#1e40af" text-anchor="middle">:10250/metrics/resource</text>
+
+  <text x="40" y="292" class="tiny" fill="#64748b">cAdvisor reads the kernel's own per-container</text>
+  <text x="40" y="308" class="tiny" fill="#64748b">accounting. No agent, no instrumentation.</text>
+
+  <!-- ============ METRICS SERVER ============ -->
+  <path d="M272 196 L326 196" stroke="#0d9488" stroke-width="2.5" fill="none" marker-end="url(#mteal)"/>
+  <text x="276" y="186" class="tiny" fill="#0f766e">scrape</text>
+  <text x="276" y="222" class="tiny" fill="#0f766e">every 15s</text>
+
+  <g filter="url(#msoft)">
+    <rect x="332" y="120" width="228" height="150" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  </g>
+  <rect x="332" y="120" width="228" height="24" rx="12" fill="#0d9488"/>
+  <rect x="332" y="133" width="228" height="11" fill="#0d9488"/>
+  <text x="446" y="137" class="badge" fill="#ffffff" text-anchor="middle">metrics-server · kube-system</text>
+
+  <text x="350" y="166" class="small" fill="#134e4a">One small Deployment.</text>
+  <rect x="350" y="178" width="192" height="30" rx="6" fill="#ccfbf1" stroke="#5eead4"/>
+  <text x="446" y="197" class="mono" fill="#0f766e" text-anchor="middle">latest sample · IN MEMORY</text>
+  <text x="350" y="228" class="tiny" fill="#0f766e">no database · no disk · no history</text>
+  <text x="350" y="248" class="tiny" fill="#0f766e">One number per pod: current usage.</text>
+
+  <text x="332" y="292" class="tiny" fill="#64748b">Not a monitoring stack. Graphs and alerts</text>
+  <text x="332" y="308" class="tiny" fill="#64748b">are Prometheus' job, not this one's.</text>
+
+  <!-- ============ API SERVER ============ -->
+  <path d="M564 196 L618 196" stroke="#326CE5" stroke-width="2.5" fill="none" marker-end="url(#mblue)"/>
+  <text x="560" y="186" class="tiny" fill="#1e40af">registers</text>
+  <text x="560" y="222" class="tiny" fill="#1e40af">APIService</text>
+
+  <g filter="url(#msoft)">
+    <rect x="624" y="120" width="236" height="150" rx="12" fill="#eff6ff" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="624" y="120" width="236" height="24" rx="12" fill="#326CE5"/>
+  <rect x="624" y="133" width="236" height="11" fill="#326CE5"/>
+  <text x="742" y="137" class="badge" fill="#ffffff" text-anchor="middle">API SERVER · aggregation layer</text>
+
+  <text x="642" y="166" class="small" fill="#1e3a8a">metrics.k8s.io becomes a real path.</text>
+  <rect x="642" y="178" width="200" height="46" rx="6" fill="#dbeafe" stroke="#93c5fd"/>
+  <text x="652" y="196" class="mono" fill="#1e40af">GET /apis/metrics.k8s.io/</text>
+  <text x="652" y="212" class="mono" fill="#1e40af">v1beta1/namespaces/*/pods</text>
+  <text x="642" y="248" class="tiny" fill="#1d4ed8">Proxied through to metrics-server.</text>
+
+  <text x="624" y="292" class="tiny" fill="#64748b">Ordinary API, ordinary RBAC. That is the whole</text>
+  <text x="624" y="308" class="tiny" fill="#64748b">point of registering this way.</text>
+
+  <!-- ============ CONSUMERS ============ -->
+  <path d="M690,330 L690,348 L240,348 L240,368" fill="none" stroke="#326CE5" stroke-width="2.5" marker-end="url(#mblue)"/>
+  <path d="M790,330 L790,368" fill="none" stroke="#326CE5" stroke-width="2.5" marker-end="url(#mblue)"/>
+
+  <text x="40" y="360" class="badge" fill="#64748b">WHO READS IT</text>
+
+  <g filter="url(#msoft)">
+    <rect x="40" y="376" width="400" height="72" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <text x="60" y="402" class="badge" fill="#334155">kubectl top nodes / pods</text>
+  <text x="60" y="424" class="tiny" fill="#64748b">A human asking what is happening right now.</text>
+  <text x="60" y="440" class="tiny" fill="#94a3b8">Returns "Metrics API not available" until the first scrape lands.</text>
+
+  <g filter="url(#msoft)">
+    <rect x="460" y="376" width="400" height="72" rx="10" fill="#fdf4ff" stroke="#a855f7" stroke-width="2"/>
+  </g>
+  <text x="480" y="402" class="badge" fill="#7e22ce">HorizontalPodAutoscaler controller</text>
+  <text x="480" y="424" class="tiny" fill="#6b21a8">The same API, polled every 15 seconds, on a loop.</text>
+  <text x="480" y="440" class="tiny" fill="#a855f7">No metrics-server → no HPA. It has nothing to divide.</text>
+
+  <text x="40" y="496" class="small" fill="#334155">One manifest installs all of it: the Deployment, the RBAC to read every kubelet, and the APIService.</text>
+  <text x="40" y="516" class="tiny" fill="#64748b">A deployment stuck at 0/1 is almost always kubelet certificate verification failing on the scrape.</text>
+</svg>

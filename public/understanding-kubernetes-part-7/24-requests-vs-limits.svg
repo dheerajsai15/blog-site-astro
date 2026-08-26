@@ -1,0 +1,126 @@
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .monob { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; font-weight: 700; }
+    </style>
+    <filter id="rsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="rblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="rred" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+    <pattern id="throttle" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#f1f5f9"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#cbd5e1" stroke-width="3"/>
+    </pattern>
+  </defs>
+
+  <rect width="900" height="620" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">One pair of numbers, two different readers</text>
+  <text x="40" y="68" class="subtitle">The request is never enforced. The limit is never scheduled on.</text>
+
+  <line x1="450" y1="96" x2="450" y2="584" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="4 4"/>
+
+  <!-- ================= LEFT: REQUEST ================= -->
+  <text x="40" y="112" class="badge" fill="#326CE5">REQUEST · read by the SCHEDULER · once, at placement</text>
+
+  <g filter="url(#rsoft)">
+    <rect x="40" y="128" width="380" height="196" rx="12" fill="#f8fafc" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <rect x="40" y="128" width="380" height="26" rx="12" fill="#326CE5"/>
+  <rect x="40" y="142" width="380" height="12" fill="#326CE5"/>
+  <text x="230" y="146" class="badge" fill="#ffffff" text-anchor="middle">NODE · allocatable cpu: 2000m</text>
+
+  <!-- capacity bar -->
+  <rect x="64" y="176" width="332" height="34" rx="5" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="64" y="176" width="58" height="34" rx="5" fill="#94a3b8"/>
+  <rect x="116" y="176" width="172" height="34" fill="#326CE5"/>
+  <text x="93" y="198" class="tiny" fill="#ffffff" text-anchor="middle">352m</text>
+  <text x="202" y="198" class="badge" fill="#ffffff" text-anchor="middle">pod A · requests 1000m</text>
+  <text x="342" y="198" class="tiny" fill="#64748b" text-anchor="middle">648m free</text>
+
+  <text x="64" y="232" class="tiny" fill="#64748b">system add-ons</text>
+  <text x="64" y="262" class="small" fill="#334155">The scheduler sums <tspan class="mono" fill="#1e40af">requests</tspan>, not usage.</text>
+  <text x="64" y="282" class="tiny" fill="#64748b">Pod A is idle at 4m. It still occupies 1000m of the budget.</text>
+  <text x="64" y="306" class="tiny" fill="#64748b">Capacity is what the machine has; allocatable is what pods get.</text>
+
+  <!-- pod B doesn't fit -->
+  <g filter="url(#rsoft)">
+    <rect x="40" y="352" width="180" height="66" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2" stroke-dasharray="5 4"/>
+  </g>
+  <text x="130" y="378" class="badge" fill="#b91c1c" text-anchor="middle">pod B</text>
+  <text x="130" y="398" class="mono" fill="#991b1b" text-anchor="middle">requests cpu: 1000m</text>
+
+  <line x1="224" y1="385" x2="290" y2="385" stroke="#dc2626" stroke-width="2.5" marker-end="url(#rred)"/>
+  <text x="300" y="378" class="badge" fill="#b91c1c">1000m &gt; 648m</text>
+  <text x="300" y="396" class="tiny" fill="#991b1b">never placed</text>
+
+  <g filter="url(#rsoft)">
+    <rect x="40" y="440" width="380" height="60" rx="10" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+  </g>
+  <text x="60" y="466" class="badge" fill="#b45309">STATUS: Pending</text>
+  <text x="60" y="488" class="mono" fill="#92400e">0/3 nodes are available: 3 Insufficient cpu.</text>
+
+  <text x="40" y="536" class="small" fill="#334155">A pod stuck here is a <tspan font-weight="700">budget</tspan> problem,</text>
+  <text x="40" y="556" class="small" fill="#334155">not a load problem. The node may be idle.</text>
+
+  <!-- ================= RIGHT: LIMIT ================= -->
+  <text x="482" y="112" class="badge" fill="#7c3aed">LIMIT · enforced by the KERNEL · continuously, via cgroups</text>
+
+  <!-- CPU -->
+  <g filter="url(#rsoft)">
+    <rect x="482" y="128" width="378" height="196" rx="12" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+  </g>
+  <rect x="482" y="128" width="378" height="26" rx="12" fill="#7c3aed"/>
+  <rect x="482" y="142" width="378" height="12" fill="#7c3aed"/>
+  <text x="671" y="146" class="badge" fill="#ffffff" text-anchor="middle">CPU · compressible</text>
+
+  <text x="504" y="178" class="mono" fill="#5b21b6">limits.cpu: 100m  →  10ms of every 100ms</text>
+
+  <!-- period bars -->
+  <g>
+    <rect x="504" y="192" width="150" height="26" rx="4" fill="url(#throttle)" stroke="#c4b5fd"/>
+    <rect x="504" y="192" width="15" height="26" rx="4" fill="#7c3aed"/>
+    <rect x="664" y="192" width="150" height="26" rx="4" fill="url(#throttle)" stroke="#c4b5fd"/>
+    <rect x="664" y="192" width="15" height="26" rx="4" fill="#7c3aed"/>
+  </g>
+  <text x="504" y="234" class="tiny" fill="#6d28d9">run 10ms</text>
+  <text x="560" y="234" class="tiny" fill="#94a3b8">throttled 90ms</text>
+  <text x="664" y="234" class="tiny" fill="#6d28d9">run 10ms</text>
+  <text x="720" y="234" class="tiny" fill="#94a3b8">throttled 90ms</text>
+
+  <text x="504" y="268" class="small" fill="#334155">Over the limit → <tspan font-weight="700" fill="#6d28d9">descheduled until the next period</tspan>.</text>
+  <text x="504" y="292" class="tiny" fill="#64748b">Nothing crashes. The symptom is latency, not a restart count.</text>
+  <text x="504" y="312" class="tiny" fill="#64748b">A limit above 1000m only helps a multi-threaded process.</text>
+
+  <!-- MEMORY -->
+  <g filter="url(#rsoft)">
+    <rect x="482" y="352" width="378" height="204" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <rect x="482" y="352" width="378" height="26" rx="12" fill="#dc2626"/>
+  <rect x="482" y="366" width="378" height="12" fill="#dc2626"/>
+  <text x="671" y="370" class="badge" fill="#ffffff" text-anchor="middle">MEMORY · not compressible</text>
+
+  <text x="504" y="402" class="mono" fill="#991b1b">limits.memory: 100Mi   process wants 200M</text>
+
+  <rect x="504" y="416" width="310" height="26" rx="4" fill="#ffffff" stroke="#fca5a5"/>
+  <rect x="504" y="416" width="290" height="26" rx="4" fill="#ef4444"/>
+  <line x1="649" y1="408" x2="649" y2="450" stroke="#7f1d1d" stroke-width="2.5"/>
+  <text x="649" y="464" class="tiny" fill="#7f1d1d" text-anchor="middle">100Mi limit</text>
+
+  <text x="504" y="494" class="small" fill="#334155">There is no "less memory, slower". The kernel's</text>
+  <text x="504" y="512" class="small" fill="#334155">OOM killer sends SIGKILL, and kubelet restarts it.</text>
+  <text x="504" y="540" class="monob" fill="#b91c1c">Reason: OOMKilled    Exit Code: 137</text>
+
+  <text x="40" y="596" class="tiny" fill="#94a3b8">requests = what the scheduler promises you · limits = what the kernel refuses to give you</text>
+</svg>

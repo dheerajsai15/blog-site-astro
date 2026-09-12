@@ -1,0 +1,102 @@
+<svg viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .repo { font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; font-weight: 700; }
+    </style>
+    <filter id="tsoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="tblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="torange" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#EF7B4D"/>
+    </marker>
+    <marker id="tred" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="640" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">Why the manifests live in a second repo</text>
+  <text x="40" y="68" class="subtitle">One repo holds code a human edits. The other holds state a robot edits. Mixing them builds a loop.</text>
+
+  <!-- app repo -->
+  <g filter="url(#tsoft)">
+    <rect x="40" y="118" width="352" height="196" rx="12" fill="#eff6ff" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <text x="62" y="146" class="repo" fill="#1e40af">todo-app-argoCD</text>
+  <text x="62" y="166" class="badge" fill="#1e40af">THE APPLICATION REPO · humans write here</text>
+  <rect x="62" y="180" width="308" height="112" rx="8" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="80" y="202" class="mono" fill="#1e3a8a">app/page.tsx</text>
+  <text x="80" y="222" class="mono" fill="#1e3a8a">package.json</text>
+  <text x="80" y="242" class="mono" fill="#1e3a8a">Dockerfile</text>
+  <text x="80" y="262" class="mono" fill="#1e3a8a">.github/workflows/prod.yml</text>
+  <text x="80" y="278" class="tiny" fill="#94a3b8">the last one is the robot</text>
+
+  <!-- arrow across -->
+  <text x="450" y="192" class="tiny" fill="#1e40af" text-anchor="middle">GitHub Actions</text>
+  <text x="450" y="207" class="tiny" fill="#1e40af" text-anchor="middle">commits the</text>
+  <text x="450" y="222" class="tiny" fill="#1e40af" text-anchor="middle">new tag</text>
+  <path d="M398 240 L500 240" stroke="#326CE5" stroke-width="2.5" fill="none" marker-end="url(#tblue)"/>
+
+  <!-- config repo -->
+  <g filter="url(#tsoft)">
+    <rect x="508" y="118" width="352" height="196" rx="12" fill="#fff7ed" stroke="#EF7B4D" stroke-width="2"/>
+  </g>
+  <text x="530" y="146" class="repo" fill="#9a3412">argo-deployment</text>
+  <text x="530" y="166" class="badge" fill="#9a3412">THE CONFIG REPO · CI writes, Argo CD reads</text>
+  <rect x="530" y="180" width="308" height="112" rx="8" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5"/>
+  <text x="548" y="202" class="mono" fill="#7c2d12">manifest.yml</text>
+  <text x="548" y="226" class="tiny" fill="#9a3412">One line in it ever changes:</text>
+  <text x="548" y="248" class="mono" fill="#b45309">image: .../todo-app-argocd:&lt;sha&gt;</text>
+  <text x="548" y="270" class="tiny" fill="#94a3b8">Every commit here is a deploy.</text>
+  <text x="548" y="284" class="tiny" fill="#94a3b8">The log is the deploy history.</text>
+
+  <path d="M684 320 L684 348" stroke="#EF7B4D" stroke-width="2.5" fill="none" marker-end="url(#torange)"/>
+  <text x="698" y="334" class="tiny" fill="#9a3412">Argo CD polls only this one</text>
+
+  <g filter="url(#tsoft)">
+    <rect x="508" y="354" width="352" height="62" rx="12" fill="#ffffff" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <text x="530" y="378" class="small" fill="#1e40af" font-weight="700">The cluster</text>
+  <text x="530" y="398" class="tiny" fill="#475569">Never hears about the app repo at all.</text>
+
+  <!-- the loop -->
+  <g filter="url(#tsoft)">
+    <rect x="40" y="340" width="420" height="232" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
+  </g>
+  <text x="62" y="368" class="badge" fill="#b91c1c">WHAT ONE REPO GETS YOU</text>
+
+  <rect x="62" y="386" width="160" height="42" rx="8" fill="#ffffff" stroke="#f87171" stroke-width="1.5"/>
+  <text x="78" y="412" class="tiny" fill="#7f1d1d">you push app code</text>
+
+  <path d="M228 407 L266 407" stroke="#dc2626" stroke-width="2" fill="none" marker-end="url(#tred)"/>
+
+  <rect x="274" y="386" width="164" height="42" rx="8" fill="#ffffff" stroke="#f87171" stroke-width="1.5"/>
+  <text x="290" y="412" class="tiny" fill="#7f1d1d">Actions bumps the tag</text>
+
+  <path d="M356 434 L356 460" stroke="#dc2626" stroke-width="2" fill="none" marker-end="url(#tred)"/>
+
+  <rect x="274" y="468" width="164" height="42" rx="8" fill="#ffffff" stroke="#f87171" stroke-width="1.5"/>
+  <text x="290" y="494" class="tiny" fill="#7f1d1d">the bot commits</text>
+
+  <path d="M266 489 L228 489" stroke="#dc2626" stroke-width="2" fill="none" marker-end="url(#tred)"/>
+
+  <rect x="62" y="468" width="160" height="42" rx="8" fill="#ffffff" stroke="#f87171" stroke-width="1.5"/>
+  <text x="78" y="494" class="tiny" fill="#7f1d1d">push to main, again</text>
+
+  <path d="M142 460 L142 434" stroke="#dc2626" stroke-width="2" fill="none" marker-end="url(#tred)"/>
+
+  <text x="62" y="538" class="tiny" fill="#7f1d1d">A build that commits to the branch that triggers builds,</text>
+  <text x="62" y="556" class="tiny" fill="#7f1d1d">which starts the build again.</text>
+
+  <text x="40" y="606" class="small" fill="#334155">Two repos, and the token that crosses between them is the only credential in the chain. None of it reaches the cluster.</text>
+</svg>

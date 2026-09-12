@@ -1,0 +1,126 @@
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1a1a2e; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .small { font-size: 12px; fill: #374151; }
+      .tiny { font-size: 11px; fill: #4b5563; }
+      .badge { font-size: 11px; font-weight: 600; }
+      .mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; }
+      .step { font-size: 12px; font-weight: 700; fill: #ffffff; }
+    </style>
+    <filter id="asoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <marker id="aorange" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#EF7B4D"/>
+    </marker>
+    <marker id="ablue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#326CE5"/>
+    </marker>
+    <marker id="agrey" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="620" fill="#ffffff"/>
+
+  <text x="40" y="46" class="title">Four processes and one comparison</text>
+  <text x="40" y="68" class="subtitle">Everything Argo CD does reduces to diffing two piles of YAML and applying the difference.</text>
+
+  <!-- cluster boundary -->
+  <rect x="256" y="96" width="604" height="396" rx="14" fill="#fbfcfe" stroke="#326CE5" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="276" y="120" class="badge" fill="#1e40af">THE CLUSTER · namespace argocd</text>
+
+  <!-- git -->
+  <g filter="url(#asoft)">
+    <rect x="40" y="134" width="190" height="96" rx="12" fill="#f8fafc" stroke="#475569" stroke-width="2"/>
+  </g>
+  <text x="60" y="160" class="small" fill="#1e293b" font-weight="700">Git repository</text>
+  <text x="60" y="182" class="mono" fill="#475569">argo-deployment</text>
+  <text x="60" y="202" class="tiny" fill="#64748b">branch main, path .</text>
+  <text x="60" y="219" class="tiny" fill="#64748b">the desired state</text>
+
+  <path d="M234 182 L270 182" stroke="#EF7B4D" stroke-width="2.5" fill="none" marker-end="url(#aorange)"/>
+  <text x="92" y="250" class="tiny" fill="#9a3412">git fetch, every reconcile</text>
+
+  <!-- 1 repo server -->
+  <g filter="url(#asoft)">
+    <rect x="276" y="134" width="272" height="96" rx="12" fill="#fff7ed" stroke="#EF7B4D" stroke-width="2"/>
+  </g>
+  <circle cx="298" cy="158" r="12" fill="#EF7B4D"/>
+  <text x="298" y="162" class="step" text-anchor="middle">1</text>
+  <text x="318" y="162" class="badge" fill="#9a3412">REPO SERVER</text>
+  <text x="294" y="186" class="tiny" fill="#7c2d12">Clones the repo, caches it, and</text>
+  <text x="294" y="204" class="tiny" fill="#7c2d12">renders Helm, Kustomize or plain</text>
+  <text x="294" y="222" class="tiny" fill="#7c2d12">YAML into final manifests.</text>
+
+  <path d="M552 182 L562 182" stroke="#EF7B4D" stroke-width="2.5" fill="none" marker-end="url(#aorange)"/>
+
+  <!-- 2 app controller -->
+  <g filter="url(#asoft)">
+    <rect x="568" y="134" width="272" height="96" rx="12" fill="#fff7ed" stroke="#EF7B4D" stroke-width="2"/>
+  </g>
+  <circle cx="590" cy="158" r="12" fill="#EF7B4D"/>
+  <text x="590" y="162" class="step" text-anchor="middle">2</text>
+  <text x="610" y="162" class="badge" fill="#9a3412">APPLICATION CONTROLLER</text>
+  <text x="586" y="186" class="tiny" fill="#7c2d12">Diffs those manifests against what</text>
+  <text x="586" y="204" class="tiny" fill="#7c2d12">is live. Sets Synced or OutOfSync.</text>
+  <text x="586" y="222" class="tiny" fill="#7c2d12">Applies when it is allowed to.</text>
+
+  <!-- you -->
+  <g filter="url(#asoft)">
+    <rect x="40" y="276" width="190" height="96" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <text x="60" y="302" class="small" fill="#334155" font-weight="700">You</text>
+  <text x="60" y="326" class="tiny" fill="#64748b">Browser on :8080, or the</text>
+  <text x="60" y="346" class="mono" fill="#475569">argocd</text>
+  <text x="106" y="346" class="tiny" fill="#64748b">CLI.</text>
+  <text x="60" y="363" class="tiny" fill="#64748b">Read-mostly.</text>
+
+  <path d="M234 318 L270 318" stroke="#EF7B4D" stroke-width="2.5" fill="none" marker-end="url(#aorange)"/>
+
+  <!-- 3 argocd-server -->
+  <g filter="url(#asoft)">
+    <rect x="276" y="270" width="272" height="96" rx="12" fill="#fff7ed" stroke="#EF7B4D" stroke-width="2"/>
+  </g>
+  <circle cx="298" cy="294" r="12" fill="#EF7B4D"/>
+  <text x="298" y="298" class="step" text-anchor="middle">3</text>
+  <text x="318" y="298" class="badge" fill="#9a3412">ARGOCD-SERVER</text>
+  <text x="294" y="322" class="tiny" fill="#7c2d12">The UI, the gRPC/REST API and the</text>
+  <text x="294" y="340" class="tiny" fill="#7c2d12">CLI endpoint. Logins, RBAC and git</text>
+  <text x="294" y="358" class="tiny" fill="#7c2d12">webhooks land here. Syncs nothing.</text>
+
+  <!-- k8s api -->
+  <g filter="url(#asoft)">
+    <rect x="568" y="270" width="272" height="96" rx="12" fill="#eff6ff" stroke="#326CE5" stroke-width="2"/>
+  </g>
+  <text x="588" y="296" class="small" fill="#1e40af" font-weight="700">Kubernetes API server</text>
+  <text x="586" y="320" class="tiny" fill="#475569">Watched for the live state, written</text>
+  <text x="586" y="338" class="tiny" fill="#475569">to on sync. The controller is an</text>
+  <text x="586" y="356" class="tiny" fill="#475569">in-cluster ServiceAccount.</text>
+
+  <path d="M704 234 L704 264" stroke="#326CE5" stroke-width="2.5" fill="none" marker-end="url(#ablue)"/>
+  <text x="716" y="256" class="tiny" fill="#1e40af">watch + apply</text>
+
+  <!-- 4 redis -->
+  <g filter="url(#asoft)">
+    <rect x="276" y="400" width="564" height="72" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <circle cx="298" cy="424" r="12" fill="#94a3b8"/>
+  <text x="298" y="428" class="step" text-anchor="middle">4</text>
+  <text x="318" y="428" class="badge" fill="#475569">REDIS</text>
+  <text x="294" y="452" class="tiny" fill="#64748b">A cache, not a database. Holds rendered manifests, resource trees and diff results for both</text>
+  <text x="294" y="466" class="tiny" fill="#64748b">of the components above it. Deleting the pod loses nothing permanent; it refills.</text>
+
+  <path d="M412 370 L412 394" stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#agrey)"/>
+  <path d="M704 370 L704 394" stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#agrey)"/>
+
+  <!-- bottom band -->
+  <g filter="url(#asoft)">
+    <rect x="40" y="512" width="820" height="82" rx="12" fill="#fafafa" stroke="#d4d4d8" stroke-width="2"/>
+  </g>
+  <text x="62" y="538" class="badge" fill="#334155">THE ONLY QUESTION IT EVER ASKS</text>
+  <text x="62" y="562" class="mono" fill="#9a3412" font-size="13">rendered manifests from git   ==   live objects in the cluster ?</text>
+  <text x="62" y="582" class="tiny" fill="#64748b">Yes, Synced. No, OutOfSync, and the diff is shown. Health is a separate question, asked of the live objects only.</text>
+</svg>

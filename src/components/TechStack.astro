@@ -1,0 +1,29 @@
+---
+import typescript from "@assets/stack/typescript.svg?raw";
+import react from "@assets/stack/react.svg?raw";
+import java from "@assets/stack/java.svg?raw";
+import nextjs from "@assets/stack/nextjs.svg?raw";
+import nodejs from "@assets/stack/nodejs.svg?raw";
+import docker from "@assets/stack/docker.svg?raw";
+import kubernetes from "@assets/stack/kubernetes.svg?raw";
+
+// Grey at rest; hover tints each logo with its brand colour.
+const stack = [
+  { name: "TypeScript", svg: typescript, brand: "#3178c6" },
+  { name: "React", svg: react, brand: "#61dafb" },
+  { name: "Java", svg: java, brand: "#ea2d2e" },
+  { name: "Next.js", svg: nextjs, brand: "var(--head)" },
+  { name: "Node.js", svg: nodejs, brand: "#5fa04e" },
+  { name: "Docker", svg: docker, brand: "#1d91ed" },
+  { name: "Kubernetes", svg: kubernetes, brand: "#326ce5" },
+];
+---
+
+<ul class="stack" aria-label={`Topics: ${stack.map((s) => s.name).join(", ")}`} {...Astro.props}>
+  {stack.map(({ name, svg, brand }) => (
+    <li class="tech" style={`--brand: ${brand}`}>
+      <span class="tech-tile" set:html={svg} />
+      <span class="tech-tip" aria-hidden="true">{name}</span>
+    </li>
+  ))}
+</ul>

@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 3"
 description: "Services, hands-on in the cloud: expose pods with NodePort, put a real load balancer in front with LoadBalancer, and keep your database internal with ClusterIP."
 date: "Jul 14 2026"
+series: kubernetes
+part: 3
+short: "Services"
 ---
 
 At the end of [Part 2](/blog/understanding-kubernetes-part-2) we had nginx running in our cluster with no way to actually visit it in a browser. Pods get IP addresses, but those IPs have two fatal problems: they're **internal to the cluster**, and they **change** every time a pod is replaced — which, as we learned, happens all the time. The fix for both is a **Service**: a stable network address that sits in front of pods and routes traffic to them.

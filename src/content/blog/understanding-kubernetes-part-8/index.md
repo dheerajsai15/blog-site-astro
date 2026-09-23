@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 8"
 description: "Argo CD: what it is, installing it on DigitalOcean with the 1-Click app, and wiring up a pipeline where pushing code triggers GitHub Actions, which builds an image and commits the new tag to a deployment repo that Argo CD syncs to the cluster."
 date: "Sep 12 2026"
+series: kubernetes
+part: 8
+short: "Argo CD"
 ---
 
 Every manifest in this series has reached the cluster the same way:

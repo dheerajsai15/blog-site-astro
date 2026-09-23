@@ -11,6 +11,18 @@ export default {
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
         serif: ["Lora", ...defaultTheme.fontFamily.serif],
+        mono: ["JetBrains Mono", ...defaultTheme.fontFamily.mono],
+      },
+      // Theme colours live in CSS variables (global.css) so light/dark swap in one place.
+      colors: {
+        bg: "var(--bg)",
+        "bg-2": "var(--bg-2)",
+        line: "var(--line)",
+        "line-2": "var(--line-2)",
+        body: "var(--text)",
+        muted: "var(--text-2)",
+        head: "var(--head)",
+        accent: "var(--accent)",
       },
     },
   },

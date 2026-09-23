@@ -13,11 +13,19 @@ export function formatDate(date: Date) {
   }).format(date);
 }
 
-export function readingTime(html: string) {
+export function readingMinutes(html: string) {
   const textOnly = html.replace(/<[^>]+>/g, "");
   const wordCount = textOnly.split(/\s+/).length;
-  const readingTimeMinutes = ((wordCount / 200) + 1).toFixed();
-  return `${readingTimeMinutes} min read`;
+  return Number(((wordCount / 200) + 1).toFixed());
+}
+
+export function readingTime(html: string) {
+  return `${readingMinutes(html)} min read`;
+}
+
+// "Sep 12"
+export function shortDate(date: Date) {
+  return date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
 }
 
 export function dateRange(startDate: Date, endDate?: Date | string): string {

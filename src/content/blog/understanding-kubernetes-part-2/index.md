@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 2"
 description: "Hands-on with pods, ReplicaSets, and Deployments: spin up a local multi-node cluster with Kind, create your first pod, and learn why you'll almost always write Deployments."
 date: "Jul 06 2026"
+series: kubernetes
+part: 2
+short: "Pods"
 ---
 
 In [Part 1](/blog/understanding-kubernetes-part-1) we built the mental model: a cluster is a group of machines, the master node decides, the worker nodes run your apps, and everything works by you *describing a desired state* and Kubernetes making it happen. Now it's time to actually describe that state. In this part we'll get our hands dirty with the three objects you'll use constantly — **pods**, **ReplicaSets**, and **Deployments**. No cloud account needed; everything runs on your laptop.

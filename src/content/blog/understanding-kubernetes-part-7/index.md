@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 7"
 description: "Resource requests and limits, what a CPU number actually buys you, the metrics-server, and handing the replica count over to a Horizontal Pod Autoscaler."
 date: "Aug 26 2026"
+series: kubernetes
+part: 7
+short: "HPA"
 ---
 
 Every Deployment in this series has carried a line like this:

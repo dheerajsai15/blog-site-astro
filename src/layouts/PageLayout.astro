@@ -24,6 +24,10 @@ const { title, description } = Astro.props;
     </main>
     <Footer />
 
+    <script>
+      import "../scripts/motion";
+    </script>
+
     <!--
       Mermaid renders any <pre class="mermaid"> blocks in posts into SVG, client
       side. It runs on astro:page-load so it also fires after View Transition

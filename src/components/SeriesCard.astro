@@ -1,0 +1,35 @@
+---
+import { partLabel, postUrl, seriesUrl, type Series } from "@lib/content";
+
+type Props = {
+  series: Series;
+  // Show "Start from Part 1" under the progress bar.
+  cta?: boolean;
+};
+
+const { series, cta = true } = Astro.props;
+const { title, description, status } = series.entry.data;
+const count = series.parts.length;
+const columns = `grid-template-columns: repeat(${count}, minmax(0, 1fr))`;
+---
+
+<article class="series-card">
+  <span class="series-glow" data-glow aria-hidden="true"></span>
+  <div class="eyebrow">{count} {count === 1 ? "part" : "parts"} · {status}</div>
+  <h3 class="mt-1.5 text-lg font-semibold tracking-tight text-head">
+    <!-- Stretched link: the whole card opens the series page. -->
+    <a href={seriesUrl(series)} class="after:absolute after:inset-0 after:content-['']">{title}</a>
+  </h3>
+  <p class="mt-1.5 max-w-[440px] text-sm leading-relaxed">{description}</p>
+  <div class="segments" style={columns} data-intro="fill" aria-hidden="true">
+    {series.parts.map(() => <span class="seg"><i data-fill></i></span>)}
+  </div>
+  <div class="seg-labels" style={columns} aria-hidden="true">
+    {series.parts.map((post) => <span>{partLabel(post)}</span>)}
+  </div>
+  {cta && (
+    <a href={postUrl(series.parts[0])} class="relative z-[1] mt-4 inline-flex items-center gap-2 text-[13px] text-head">
+      Start from Part {series.parts[0].data.part} <span aria-hidden="true">→</span>
+    </a>
+  )}
+</article>

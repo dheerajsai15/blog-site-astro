@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #f6f4f0;
+  --bg-2: #efece6;
+  --line: rgb(0 0 0 / 0.08);
+  --line-2: rgb(0 0 0 / 0.14);
+  --hover: rgb(0 0 0 / 0.035);
+  --text: rgb(0 0 0 / 0.6);
+  --text-2: rgb(0 0 0 / 0.42);
+  --head: #1a1816;
+  --prose: rgb(26 24 22 / 0.85);
+  --accent: #b86e1a;
+  --code-bg: #211f1c;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html.dark {
+  --bg: #1a1816;
+  --bg-2: #211f1c;
+  --line: rgb(255 255 255 / 0.08);
+  --line-2: rgb(255 255 255 / 0.14);
+  --hover: rgb(255 255 255 / 0.045);
+  --text: rgb(255 255 255 / 0.62);
+  --text-2: rgb(255 255 255 / 0.4);
+  --head: #f4f1ec;
+  --prose: rgb(244 241 236 / 0.8);
+  --accent: #e0a458;
+  --code-bg: #211f1c;
+}
+
 html {
   overflow-y: scroll;
   color-scheme: light;
@@ -17,57 +46,483 @@ body {
 }
 
 body {
-  @apply font-sans antialiased;
-  @apply flex flex-col;
-  @apply bg-stone-100 dark:bg-stone-900;
-  @apply text-black/50 dark:text-white/75;
+  @apply font-sans antialiased flex flex-col bg-bg text-body;
 }
 
+/* Elements the intro animates stay hidden until GSAP has set their start state (see Head.astro). */
+html.intro-pending [data-intro] {
+  visibility: hidden;
+}
+
+/* ---------- header ---------- */
+
 header {
-  @apply fixed top-0 left-0 right-0 z-50 py-5;
-  @apply bg-stone-100/75 dark:bg-stone-900/25;
-  @apply backdrop-blur-sm saturate-200;
+  @apply fixed top-0 left-0 right-0 z-50 border-b border-transparent;
+  @apply backdrop-blur-md backdrop-saturate-150;
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  transition: border-color 0.3s;
+}
+
+html.scrolled header {
+  @apply border-line;
+}
+
+.logo {
+  @apply flex items-center font-mono text-sm font-medium tracking-tight text-head sm:text-[15px];
+}
+
+.logo-prompt {
+  @apply mr-2.5 text-accent;
+}
+
+.logo-cursor {
+  @apply ml-0.5 inline-block bg-accent;
+  width: 0.6em;
+  height: 1.2em;
+  opacity: 0.9;
+}
+
+.logo-cursor[data-blink] {
+  animation: blink 1.06s steps(1) infinite;
+}
+
+/* A one-line "terminal": the cd command sits on top of the resting prompt and scrolls away.
+   Clipped vertically only, so the longer command can run past the prompt's width. */
+.logo-screen {
+  @apply relative block;
+  overflow-x: visible;
+  overflow-y: clip;
+}
+
+.logo-line {
+  @apply flex items-center whitespace-nowrap;
+}
+
+.logo-cmd {
+  @apply invisible absolute left-0 top-0;
+}
+
+html.typing-pending .logo-cmd {
+  @apply visible;
+}
+
+html.typing-pending .logo-cmd .ch {
+  display: none;
+}
+
+html.typing-pending .logo-home {
+  @apply invisible;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.nav-link {
+  @apply relative z-[1] rounded-full px-3 py-1.5 text-sm transition-colors duration-300 hover:text-head;
+}
+
+.nav-link[aria-current="page"] {
+  @apply text-head;
+}
+
+.nav-pill {
+  @apply pointer-events-none absolute left-0 top-0 z-0 h-full rounded-full bg-line opacity-0;
 }
 
 main {
-  @apply flex-1 py-32;
+  @apply flex-1 pb-24 pt-32 sm:pt-[152px];
 }
 
 footer {
-  @apply py-5 text-sm;
+  @apply border-t border-line py-7 text-xs text-muted;
 }
 
-article {
-  @apply max-w-full prose dark:prose-invert prose-img:mx-auto prose-img:my-auto;
-  @apply prose-headings:font-semibold prose-p:font-serif;
-  @apply prose-headings:text-black prose-headings:dark:text-white;
+/* ---------- shared bits ---------- */
+
+.eyebrow {
+  @apply font-mono text-[11px] uppercase tracking-[0.14em] text-muted;
 }
 
-@layer utilities {
-  article a {
-    @apply font-sans text-current underline underline-offset-2;
-    @apply decoration-black/15 dark:decoration-white/30;
-    @apply transition-colors duration-300 ease-in-out;
+.page-title {
+  @apply font-serif text-4xl font-normal tracking-tight text-head sm:text-[44px] sm:leading-[1.12];
+  text-wrap: balance;
+}
+
+.section {
+  @apply mt-20 sm:mt-[88px];
+}
+
+.section-head {
+  @apply mb-4 flex items-baseline justify-between;
+}
+
+.section-head h2 {
+  @apply text-sm font-semibold text-head;
+}
+
+.link-u {
+  @apply relative text-[13px] transition-colors duration-300 hover:text-head;
+}
+
+.link-u::after {
+  @apply absolute inset-x-0 -bottom-[3px] h-px bg-current opacity-[0.35];
+  content: "";
+}
+
+/* Underline draws in from the left, retracts to the right. */
+.link-draw {
+  @apply relative transition-colors duration-300 hover:text-head;
+}
+
+.link-draw::after {
+  @apply absolute bottom-[-3px] left-0 h-px w-full bg-head;
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease);
+}
+
+.link-draw:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- home ---------- */
+
+.intro {
+  @apply max-w-[560px] font-serif text-[19px] leading-[1.55] text-head sm:text-[22px];
+}
+
+.intro em {
+  @apply block italic text-muted;
+}
+
+.stack {
+  @apply mt-7 flex flex-wrap gap-2.5;
+}
+
+.tech {
+  @apply relative;
+}
+
+.tech-tile {
+  @apply grid size-11 place-items-center rounded-xl border border-line text-muted;
+  transition: color 0.35s, border-color 0.35s, background-color 0.35s, transform 0.45s var(--ease);
+}
+
+.tech-tile svg {
+  @apply size-[22px];
+}
+
+.tech-tip {
+  @apply pointer-events-none absolute left-1/2 top-[calc(100%+8px)] whitespace-nowrap font-mono text-[10.5px] text-body opacity-0;
+  transform: translate(-50%, -4px);
+  transition: opacity 0.3s, transform 0.45s var(--ease);
+}
+
+.tech:hover .tech-tile {
+  color: var(--brand);
+  border-color: color-mix(in srgb, var(--brand) 40%, transparent);
+  background: color-mix(in srgb, var(--brand) 8%, transparent);
+  transform: translateY(-3px);
+}
+
+.tech:hover .tech-tip {
+  @apply opacity-100;
+  transform: translate(-50%, 0);
+}
+
+/* series card */
+.series-card {
+  @apply relative block overflow-hidden rounded-[14px] border border-line p-5 sm:p-[22px];
+  background: linear-gradient(180deg, var(--bg-2), transparent);
+  transition: border-color 0.35s;
+}
+
+.series-card:hover {
+  @apply border-line-2;
+}
+
+.series-glow {
+  @apply pointer-events-none absolute -right-[120px] -top-40 size-80 rounded-full;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+}
+
+.segments {
+  @apply mt-5 grid gap-1.5;
+}
+
+.seg {
+  @apply h-1 overflow-hidden rounded bg-line;
+}
+
+.seg i {
+  @apply block h-full origin-left bg-accent;
+}
+
+.seg-labels {
+  @apply mt-2 hidden gap-1.5 sm:grid;
+}
+
+.seg-labels span {
+  @apply truncate font-mono text-[10px] text-muted;
+}
+
+/* post rows */
+.rows {
+  @apply relative;
+}
+
+.rows-hl {
+  @apply pointer-events-none absolute -inset-x-3.5 top-0 h-0 rounded-[10px] opacity-0;
+  background: var(--hover);
+}
+
+.row {
+  @apply relative z-[1] grid grid-cols-[52px_1fr_auto] items-baseline gap-3 border-t border-line py-4 sm:grid-cols-[64px_1fr_auto] sm:gap-[18px];
+}
+
+.rows > li:last-child .row {
+  @apply border-b;
+}
+
+.row-lead {
+  @apply font-mono text-xs text-muted;
+}
+
+.row-title {
+  @apply text-[15px] font-medium tracking-[-0.005em] text-head;
+}
+
+.row-title span {
+  @apply inline-block;
+  transition: transform 0.45s var(--ease);
+}
+
+.row-desc {
+  @apply mt-1 truncate text-[13px];
+}
+
+.row-meta {
+  @apply flex items-center gap-2.5 whitespace-nowrap font-mono text-[11px] text-muted;
+}
+
+.row-arrow {
+  @apply inline-block text-head opacity-0;
+  transform: translateX(-6px);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+}
+
+.row:hover .row-title span,
+.row:focus-visible .row-title span {
+  transform: translateX(4px);
+}
+
+.row:hover .row-arrow,
+.row:focus-visible .row-arrow {
+  @apply opacity-100;
+  transform: none;
+}
+
+.year-grid {
+  @apply grid grid-cols-1 gap-3 sm:grid-cols-[90px_1fr] sm:gap-0;
+}
+
+.year {
+  @apply self-start font-mono text-xs text-muted sm:sticky sm:top-24 sm:pt-[18px];
+}
+
+/* ---------- post ---------- */
+
+.progress {
+  @apply pointer-events-none fixed inset-x-0 top-0 z-[60] h-0.5;
+}
+
+.progress i {
+  @apply block h-full origin-left scale-x-0 bg-accent;
+}
+
+.post-grid {
+  @apply mx-auto max-w-[680px] px-6;
+}
+
+.toc {
+  @apply hidden;
+}
+
+@media (min-width: 1280px) {
+  .post-grid {
+    @apply grid max-w-none justify-center gap-6 px-0;
+    grid-template-columns: 200px 680px 200px;
   }
-  article a:hover {
-    @apply text-black dark:text-white;
-    @apply decoration-black/25 dark:decoration-white/50;
+
+  .toc {
+    @apply sticky top-[120px] mt-[250px] block self-start;
   }
 }
 
-.animate {
-  @apply opacity-0 translate-y-3;
-  @apply transition-all duration-700 ease-out;
+.toc ol {
+  @apply border-l border-line;
 }
 
-.animate.show {
-  @apply opacity-100 translate-y-0;
+.toc a {
+  @apply block py-[5px] pl-3.5 text-[12.5px] leading-snug text-muted transition-colors duration-300 hover:text-body;
 }
 
-html #back-to-top {
-  @apply opacity-0 pointer-events-none;
+.toc a[data-active] {
+  @apply text-head;
 }
 
-html.scrolled #back-to-top {
-  @apply opacity-100 pointer-events-auto;
+.toc-marker {
+  @apply absolute -left-px top-0 h-0 w-px bg-accent;
+}
+
+.crumbs {
+  @apply flex flex-wrap items-center gap-2 text-[13px];
+}
+
+.crumbs a {
+  @apply transition-colors duration-300 hover:text-head;
+}
+
+.crumbs .sep {
+  @apply text-muted;
+}
+
+.post-title {
+  @apply mt-6 font-serif text-[34px] font-normal leading-[1.12] tracking-[-0.02em] text-head sm:text-[44px];
+  text-wrap: balance;
+}
+
+.post-desc {
+  @apply mt-4 text-base leading-relaxed;
+}
+
+.post-meta {
+  @apply mt-6 flex flex-wrap items-center gap-x-3.5 gap-y-2 border-y border-line py-3.5 font-mono text-xs text-muted;
+}
+
+.dots {
+  @apply ml-auto flex items-center gap-1;
+}
+
+.dots b {
+  @apply block h-[3px] w-3.5 rounded-sm bg-line-2;
+}
+
+.dots b.done {
+  @apply bg-accent opacity-60;
+}
+
+.dots b.current {
+  @apply w-[22px] bg-accent;
+}
+
+.series-nav {
+  @apply mt-16 grid grid-cols-1 gap-3 sm:grid-cols-2;
+}
+
+.series-nav a {
+  @apply rounded-xl border border-line px-[18px] py-4 transition-colors duration-300 hover:border-line-2 hover:bg-[var(--hover)];
+}
+
+.series-nav .t {
+  @apply mt-1.5 text-sm font-medium text-head;
+}
+
+/* Post body. Typography plugin handles lists and tables; colours come from the theme variables. */
+.post-body {
+  @apply prose mt-11 max-w-none;
+  --tw-prose-body: var(--prose);
+  --tw-prose-headings: var(--head);
+  --tw-prose-bold: var(--head);
+  --tw-prose-links: var(--head);
+  --tw-prose-counters: var(--text-2);
+  --tw-prose-bullets: var(--text-2);
+  --tw-prose-hr: var(--line);
+  --tw-prose-quotes: var(--head);
+  --tw-prose-quote-borders: var(--line-2);
+  --tw-prose-captions: var(--text-2);
+  --tw-prose-code: var(--head);
+  --tw-prose-th-borders: var(--line-2);
+  --tw-prose-td-borders: var(--line);
+  font-size: 17.5px;
+  line-height: 1.8;
+}
+
+.post-body :where(p, li, blockquote) {
+  @apply font-serif;
+}
+
+/* Mermaid renders its labels as <p> inside the SVG; keep them in the sans face. */
+.post-body .mermaid,
+.post-body .mermaid p {
+  @apply font-sans;
+}
+
+.post-body :where(h2, h3, h4) {
+  @apply font-sans font-semibold tracking-tight;
+}
+
+.post-body h2 {
+  @apply mb-[18px] mt-14 text-[22px];
+}
+
+.post-body h3 {
+  @apply mt-10 text-lg;
+}
+
+.post-body :where(table) {
+  @apply font-sans text-[14px];
+}
+
+.post-body img {
+  @apply mx-auto my-auto;
+}
+
+.post-body a {
+  @apply font-sans text-current underline decoration-line-2 underline-offset-2 transition-colors duration-300;
+}
+
+.post-body a:hover {
+  @apply text-head decoration-current;
+}
+
+.post-body :not(pre) > code {
+  @apply rounded-[5px] bg-line px-1.5 py-0.5 font-mono text-[0.8em] font-normal text-head;
+}
+
+.post-body :not(pre) > code::before,
+.post-body :not(pre) > code::after {
+  content: none;
+}
+
+/* Code blocks get wrapped in .code by the motion script (language label + copy button). */
+.code {
+  @apply relative my-7 overflow-hidden rounded-xl border border-line;
+  background: var(--code-bg);
+}
+
+.code-bar {
+  @apply flex items-center justify-between border-b border-white/[0.07] px-3.5 py-2 font-mono text-[11px] text-white/40;
+}
+
+.code-copy {
+  @apply rounded-md border border-white/[0.14] px-2 py-0.5 text-white/60 transition-colors duration-300 hover:text-white/90;
+}
+
+.code-copy[data-copied] {
+  @apply border-[#6fcf97]/40 text-[#6fcf97];
+}
+
+.post-body .code pre {
+  @apply m-0 rounded-none px-4 py-4 font-mono text-[13.5px] leading-[1.7];
+  background: transparent !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-cursor[data-blink] {
+    animation: none;
+  }
 }

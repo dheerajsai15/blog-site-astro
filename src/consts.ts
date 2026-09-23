@@ -18,13 +18,18 @@ export const BLOG: Metadata = {
     "Writing about software I build — architecture, the tricky parts, and what I learned.",
 };
 
+export const SERIES: Metadata = {
+  TITLE: "Series",
+  DESCRIPTION: "Longer topics written in parts, meant to be read in order.",
+};
+
 export const SOCIALS: Socials = [
   {
-    NAME: "github",
+    NAME: "GitHub",
     HREF: "https://github.com/dheerajsai15",
   },
   {
-    NAME: "linkedin",
+    NAME: "LinkedIn",
     HREF: "https://www.linkedin.com/in/dheeraj-sai-60586a1b4/",
   },
 ];

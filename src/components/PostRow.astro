@@ -1,0 +1,26 @@
+---
+import { postUrl, type Post } from "@lib/content";
+import { readingMinutes, shortDate } from "@lib/utils";
+
+type Props = {
+  post: Post;
+  // Left column: the date by default, or e.g. a part number on series pages.
+  lead?: string;
+};
+
+const { post, lead = shortDate(post.data.date) } = Astro.props;
+---
+
+<li data-row>
+  <a href={postUrl(post)} class="row">
+    <span class="row-lead">{lead}</span>
+    <div class="min-w-0">
+      <div class="row-title"><span>{post.data.title}</span></div>
+      <div class="row-desc">{post.data.description}</div>
+    </div>
+    <span class="row-meta">
+      {readingMinutes(post.body)} min
+      <span class="row-arrow" aria-hidden="true">→</span>
+    </span>
+  </a>
+</li>

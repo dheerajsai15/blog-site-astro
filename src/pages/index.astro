@@ -1,75 +1,65 @@
 ---
-import { getCollection } from "astro:content";
 import Container from "@components/Container.astro";
 import PageLayout from "@layouts/PageLayout.astro";
-import ArrowCard from "@components/ArrowCard.astro";
-import Link from "@components/Link.astro";
+import PostList from "@components/PostList.astro";
+import PostRow from "@components/PostRow.astro";
+import SeriesCard from "@components/SeriesCard.astro";
+import TechStack from "@components/TechStack.astro";
 import { SITE, HOME, SOCIALS } from "@consts";
+import { getPosts, getSeries } from "@lib/content";
 
-const blog = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+const posts = await getPosts();
+const series = await getSeries(posts);
+const latest = posts.slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-semibold text-black dark:text-white">
-      Hi, I'm Dheeraj <span class="text-xl">👋</span>
-    </h4>
-    <div class="space-y-16">
-      <section>
-        <article class="space-y-4">
-          <p class="animate">
-            I write these mostly so future me can look them up.
-            If they help you too, even better.
-          </p>
-        </article>
-      </section>
+    <section>
+      <p class="eyebrow mb-5" data-intro="fade" data-intro-at="0.1">Notes on building things</p>
+      <p class="intro" data-intro="lines" data-intro-at="0.2">
+        I write these mostly so future me can look them up.
+        <em>If they help you too, even better.</em>
+      </p>
+      <TechStack data-intro="pop" data-intro-at="0.7" />
+    </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Latest posts
-          </h5>
-          <Link href="/blog">
-            See all posts
-          </Link>
+    {series.length > 0 && (
+      <section class="section" data-intro="fade" data-intro-at="0.95">
+        <div class="section-head">
+          <h2>Series</h2>
+          <a href="/series" class="link-u">All series</a>
         </div>
-        <ul class="flex flex-col gap-4">
-          {blog.map(post => (
-            <li>
-              <ArrowCard entry={post} />
-            </li>
-          ))}
-        </ul>
+        <div class="flex flex-col gap-4">
+          {series.map((s) => <SeriesCard series={s} />)}
+        </div>
       </section>
+    )}
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
-          Let's Connect
-        </h5>
-        <article>
-          <p>
-            Want to chat or have a question? Reach out below.
-          </p>
-        </article>
-        <ul class="flex flex-wrap gap-2">
-          {SOCIALS.map(SOCIAL => (
-            <li class="flex gap-x-2 text-nowrap">
-              <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
-                {SOCIAL.NAME}
-              </Link>
-              {"/"}
-            </li>
-          ))}
-          <li class="line-clamp-1">
-            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
-              {SITE.EMAIL}
-            </Link>
+    <section class="section">
+      <div class="section-head" data-intro="fade" data-intro-at="1.05">
+        <h2>Latest</h2>
+        <a href="/blog" class="link-u">See all posts</a>
+      </div>
+      <PostList data-intro="rows" data-intro-at="1.15">
+        {latest.map((post) => <PostRow post={post} />)}
+      </PostList>
+    </section>
+
+    <section id="connect" class="section" data-intro="fade" data-intro-at="1.45">
+      <div class="section-head"><h2>Say hi</h2></div>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        {SOCIALS.map((social) => (
+          <li>
+            <a href={social.HREF} target="_blank" rel="noopener" class="link-draw" aria-label={`${SITE.NAME} on ${social.NAME}`}>
+              {social.NAME}
+            </a>
           </li>
-        </ul>
-      </section>
-    </div>
+        ))}
+        <li>
+          <a href={`mailto:${SITE.EMAIL}`} class="link-draw" aria-label={`Email ${SITE.NAME}`}>{SITE.EMAIL}</a>
+        </li>
+      </ul>
+    </section>
   </Container>
 </PageLayout>

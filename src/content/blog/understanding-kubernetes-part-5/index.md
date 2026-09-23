@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 5"
 description: "ConfigMaps and Secrets: pull configuration out of your image, inject it as environment variables or mounted files, and understand exactly why a Secret is not private."
 date: "Aug 09 2026"
+series: kubernetes
+part: 5
+short: "Config"
 ---
 
 Across the last four posts we quietly did something that would get flagged in any real code review. In [Part 3](/blog/understanding-kubernetes-part-3) we wrote a database password directly into a pod manifest:

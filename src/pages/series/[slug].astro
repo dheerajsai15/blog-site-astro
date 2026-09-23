@@ -1,0 +1,53 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import PostList from "@components/PostList.astro";
+import PostRow from "@components/PostRow.astro";
+import { getSeries, type Series } from "@lib/content";
+import { readingMinutes } from "@lib/utils";
+
+export async function getStaticPaths() {
+  const series = await getSeries();
+  return series.map((s) => ({
+    params: { slug: s.entry.slug },
+    props: s,
+  }));
+}
+type Props = Series;
+
+const series = Astro.props;
+const { title, description, status } = series.entry.data;
+const { Content } = await series.entry.render();
+const minutes = series.parts.reduce((sum, post) => sum + readingMinutes(post.body), 0);
+---
+
+<PageLayout title={title} description={description}>
+  <Container>
+    <nav class="crumbs" aria-label="Breadcrumb" data-intro="fade" data-intro-at="0">
+      <a href="/series">← Series</a>
+    </nav>
+    <h1 class="page-title mt-6" data-intro="lines" data-intro-at="0.1">{title}</h1>
+    <p class="mt-3 text-[15px] leading-relaxed" data-intro="fade" data-intro-at="0.35">{description}</p>
+    <p class="post-meta" data-intro="fade" data-intro-at="0.45">
+      <span>{series.parts.length} parts</span>
+      <span aria-hidden="true">·</span>
+      <span>{status}</span>
+      <span aria-hidden="true">·</span>
+      <span>about {Math.round(minutes / 5) * 5} min in total</span>
+    </p>
+
+    {series.entry.body?.trim() && (
+      <div class="post-body !mt-8" data-intro="fade" data-intro-at="0.5">
+        <Content />
+      </div>
+    )}
+
+    <div class="mt-12">
+      <PostList data-intro="rows" data-intro-at="0.55">
+        {series.parts.map((post) => (
+          <PostRow post={post} lead={String(post.data.part).padStart(2, "0")} />
+        ))}
+      </PostList>
+    </div>
+  </Container>
+</PageLayout>

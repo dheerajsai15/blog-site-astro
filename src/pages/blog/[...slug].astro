@@ -1,49 +1,118 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
-import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime } from "@lib/utils";
-import BackToPrev from "@components/BackToPrev.astro";
+import { getPosts, getSeries, partLabel, postUrl, seriesUrl } from "@lib/content";
+import type { Post } from "@lib/content";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog"))
-    .filter(post => !post.data.draft)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = await getPosts();
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: post,
   }));
 }
-type Props = CollectionEntry<"blog">;
+type Props = Post;
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
+
+const series = post.data.series
+  ? (await getSeries()).find((s) => s.entry.slug === post.data.series)
+  : undefined;
+const index = series ? series.parts.findIndex((p) => p.slug === post.slug) : -1;
+const prev = series && index > 0 ? series.parts[index - 1] : undefined;
+const next = series && index < series.parts.length - 1 ? series.parts[index + 1] : undefined;
+
+// Top-level sections only. Drop the "1. " numbering the headings carry in markdown.
+const sections = headings
+  .filter((h) => h.depth === 2)
+  .map((h) => ({ slug: h.slug, text: h.text.replace(/^\d+\.\s*/, "") }));
 ---
 
 <PageLayout title={post.data.title} description={post.data.description}>
-  <Container>
-    <div class="animate">
-      <BackToPrev href="/blog">
-        Back to blog
-      </BackToPrev>
-    </div>
-    <div class="space-y-1 my-10">
-      <div class="animate flex items-center gap-1.5">
-        <div class="font-base text-sm">
-          <FormattedDate date={post.data.date} />
+  <div class="progress" aria-hidden="true"><i data-progress></i></div>
+
+  <div class="post-grid">
+    {sections.length > 1 ? (
+      <aside class="toc" data-toc aria-label="On this page">
+        <p class="eyebrow mb-3.5">On this page</p>
+        <div class="relative">
+          <span class="toc-marker" data-toc-marker aria-hidden="true"></span>
+          <ol>
+            {sections.map((s) => (
+              <li><a href={`#${s.slug}`}>{s.text}</a></li>
+            ))}
+          </ol>
         </div>
-        &bull;
-        <div class="font-base text-sm">
-          {readingTime(post.body)}
-        </div>
+      </aside>
+    ) : <div />}
+
+    <div class="min-w-0">
+      <nav class="crumbs" aria-label="Breadcrumb" data-intro="fade" data-intro-at="0">
+        <a href="/blog">← Posts</a>
+        {series && (
+          <>
+            <span class="sep">/</span>
+            <a href={seriesUrl(series)}>{series.entry.data.title}</a>
+            <span class="sep">/</span>
+            <span>{partLabel(post)}</span>
+          </>
+        )}
+      </nav>
+
+      <h1 class="post-title" data-intro="lines" data-intro-at="0.1">{post.data.title}</h1>
+      <p class="post-desc" data-intro="fade" data-intro-at="0.4">{post.data.description}</p>
+
+      <div class="post-meta" data-intro="fade" data-intro-at="0.55">
+        <FormattedDate date={post.data.date} />
+        <span aria-hidden="true">·</span>
+        <span>{readingTime(post.body)}</span>
+        {series && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>Part {post.data.part} of {series.parts.length}</span>
+            <span class="dots" data-intro="fill" aria-hidden="true">
+              {series.parts.map((_, i) => (
+                <b class={i < index ? "done" : i === index ? "current" : ""} data-fill />
+              ))}
+            </span>
+          </>
+        )}
       </div>
-      <div class="animate text-2xl font-semibold text-black dark:text-white">
-        {post.data.title}
-      </div>
+
+      <article class="post-body" data-post-body data-intro="fade" data-intro-at="0.7">
+        <Content />
+      </article>
+
+      {series && (
+        <nav class="series-nav" aria-label={`${series.entry.data.title} parts`} data-reveal>
+          {prev ? (
+            <a href={postUrl(prev)}>
+              <p class="eyebrow">← Part {prev.data.part}</p>
+              <p class="t">{partLabel(prev)}</p>
+            </a>
+          ) : (
+            <a href={seriesUrl(series)}>
+              <p class="eyebrow">← Series</p>
+              <p class="t">All parts</p>
+            </a>
+          )}
+          {next ? (
+            <a href={postUrl(next)} class="sm:text-right">
+              <p class="eyebrow">Part {next.data.part} →</p>
+              <p class="t">{partLabel(next)}</p>
+            </a>
+          ) : (
+            <a href={seriesUrl(series)} class="sm:text-right">
+              <p class="eyebrow">{series.entry.data.status === "complete" ? "Series complete" : "More parts coming"}</p>
+              <p class="t">All parts →</p>
+            </a>
+          )}
+        </nav>
+      )}
     </div>
-    <article class="animate">
-      <Content />
-    </article>
-  </Container>
+
+    <div aria-hidden="true"></div>
+  </div>
 </PageLayout>

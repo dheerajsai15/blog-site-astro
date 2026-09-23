@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 6"
 description: "Storage that outlives the pod: why container filesystems vanish, how PersistentVolumes and PersistentVolumeClaims split the job in two, an NFS server run with Docker Compose on EC2, and dynamic provisioning with DigitalOcean block storage."
 date: "Aug 15 2026"
+series: kubernetes
+part: 6
+short: "Storage"
 ---
 
 Every pod we've built across the last five posts has been disposable. For stateless apps that's a feature — it's what makes the rolling updates in [Part 2](/blog/understanding-kubernetes-part-2) safe. For the Postgres pod we ran in [Part 3](/blog/understanding-kubernetes-part-3), it's a bug.

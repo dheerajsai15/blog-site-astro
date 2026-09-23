@@ -1,21 +1,59 @@
 ---
 import Container from "@components/Container.astro";
-import Link from "@components/Link.astro";
 import { SITE } from "@consts";
+
+const path = Astro.url.pathname;
+const links = [
+  { href: "/blog", label: "Posts", active: path.startsWith("/blog") },
+  { href: "/series", label: "Series", active: path.startsWith("/series") },
+  // Just a jump to the bottom of the home page, so it drops off on small screens.
+  { href: "/#connect", label: "Contact", active: false, wide: true },
+];
+
+const name = SITE.NAME.toLowerCase();
+// On the first visit the motion script types this command, "presses enter", and the prompt
+// below scrolls into place. Each letter is its own span so it can be typed one by one.
+const command = [...`cd "${name}"`];
 ---
 
 <header>
   <Container>
-    <div class="flex flex-wrap gap-y-2 justify-between">
-      <Link href="/" underline={false}>
-        <div class="font-semibold">
-          {SITE.NAME}
-        </div>
-      </Link>
-      <nav class="flex gap-1">
-        <Link href="/blog">
-            Posts
-        </Link>
+    <div class="flex h-16 items-center justify-between">
+      <a href="/" class="logo" aria-label={`${SITE.NAME}, home`}>
+        <span class="logo-screen" aria-hidden="true">
+          <span class="logo-line logo-cmd">
+            <span class="logo-prompt">❯</span>
+            {command.map((ch) => <span class="ch">{ch === " " ? "\u00a0" : ch}</span>)}
+            <span class="logo-cursor"></span>
+          </span>
+          <span class="logo-line logo-home">
+            <span class="logo-prompt">❯</span>
+            <span>{name}</span>
+            <span class="logo-cursor" data-blink></span>
+          </span>
+        </span>
+      </a>
+      <nav class="relative flex items-center gap-0.5" data-nav>
+        <span class="nav-pill" data-nav-pill aria-hidden="true"></span>
+        {links.map(({ href, label, active, wide }) => (
+          <a href={href} class:list={["nav-link", wide && "hidden sm:block"]} aria-current={active ? "page" : undefined}>
+            {label}
+          </a>
+        ))}
+        <button
+          id="theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          class="ml-2 grid size-[30px] place-items-center rounded-full border border-line-2 transition-colors duration-300 hover:text-head"
+        >
+          <svg class="block dark:hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="hidden dark:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+        </button>
       </nav>
     </div>
   </Container>

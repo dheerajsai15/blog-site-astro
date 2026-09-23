@@ -1,0 +1,8 @@
+---
+// A list of PostRows. One highlight block (rows-hl) glides between rows on hover, driven by the motion script.
+---
+
+<ul class="rows" data-rows {...Astro.props}>
+  <li class="rows-hl" aria-hidden="true"></li>
+  <slot />
+</ul>

@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 1"
 description: "A plain-English starting point for Kubernetes: what a cluster actually is, what lives inside the master node, and what happens on the worker nodes where your apps run."
 date: "Jul 01 2026"
+series: kubernetes
+part: 1
+short: "Cluster"
 ---
 
 Kubernetes has a reputation for being complicated. A lot of that is just new vocabulary — a wall of unfamiliar words that feels intimidating the first time you hear it. In this post I'll try to explain what all that vocabulary actually means in simple terms, and hopefully by the end you'll understand, at a high level, what Kubernetes does. No setup, no YAML, no commands — just the mental model.

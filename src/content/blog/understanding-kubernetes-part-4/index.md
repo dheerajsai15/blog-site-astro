@@ -2,6 +2,9 @@
 title: "Understanding Kubernetes — Part 4"
 description: "Ingress and ingress controllers: put many services behind a single load balancer, install nginx ingress on a real cluster, and route traffic by domain and path."
 date: "Aug 01 2026"
+series: kubernetes
+part: 4
+short: "Ingress"
 ---
 
 In [Part 3](/blog/understanding-kubernetes-part-3) We got nginx onto the internet with a LoadBalancer service, and it worked cleanly — one clean public IP, no weird ports. But then the arithmetic showed up: a LoadBalancer service asks your cloud provider for a *real* load balancer, and cloud load balancers cost money. Ten public services means ten load balancers, ten IPs, and ten bills.

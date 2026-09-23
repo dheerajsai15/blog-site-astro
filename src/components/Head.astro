@@ -1,13 +1,18 @@
 ---
 import "../styles/global.css";
 import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
 import "@fontsource/lora/400.css";
+import "@fontsource/lora/400-italic.css";
 import "@fontsource/lora/600.css";
+import "@fontsource/jetbrains-mono/latin-400.css";
+import "@fontsource/jetbrains-mono/latin-500.css";
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
 import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2";
 import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
+import mono500 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2";
 
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@consts";
@@ -36,6 +41,7 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href={mono500} as="font" type="font/woff2" crossorigin/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -76,103 +82,44 @@ const { title, description, image = "/nano.png" } = Astro.props;
 </script>
 
 <script is:inline>
+  // Runs before first paint. Hides elements the intro animates (and the logo letters on the
+  // first page of a visit) so there's no flash before GSAP takes over in scripts/motion.ts.
+  // A timeout reveals everything if the motion script never runs.
+  function preparePage(doc) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const html = doc.documentElement;
+    html.classList.add("intro-pending");
+    if (!sessionStorage.getItem("logo-typed")) html.classList.add("typing-pending");
+    setTimeout(() => document.documentElement.classList.remove("intro-pending", "typing-pending"), 4000);
+  }
+
   function init() {
     preloadTheme();
     onScroll();
-    animate();
 
-    const backToTop = document.getElementById("back-to-top");
-    backToTop?.addEventListener("click", (event) => scrollToTop(event));
-
-    const backToPrev = document.getElementById("back-to-prev");
-    backToPrev?.addEventListener("click", () => window.history.back());
-
-    const lightThemeButton = document.getElementById("light-theme-button");
-    lightThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "light");
-      toggleTheme(false);
-    });
-
-    const darkThemeButton = document.getElementById("dark-theme-button");
-    darkThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "dark");
-      toggleTheme(true);
-    });
-
-    const systemThemeButton = document.getElementById("system-theme-button");
-    systemThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "system");
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    });
-
-    window.matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", event => {
-        if (localStorage.theme === "system" || !localStorage.theme) {
-          toggleTheme(event.matches);
-        }
-      }
-    );
-
-    document.addEventListener("scroll", onScroll);
-  }
-
-  function animate() {
-    const animateElements = document.querySelectorAll(".animate");
-
-    animateElements.forEach((element, index) => {
-      setTimeout(() => {
-        element.classList.add("show");
-      }, index * 150);
+    document.getElementById("theme-toggle")?.addEventListener("click", () => {
+      const dark = !document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", dark ? "dark" : "light");
+      toggleTheme(dark);
     });
   }
 
   function onScroll() {
-    if (window.scrollY > 0) {
-      document.documentElement.classList.add("scrolled");
-    } else {
-      document.documentElement.classList.remove("scrolled");
-    }
+    document.documentElement.classList.toggle("scrolled", window.scrollY > 0);
   }
 
-  function scrollToTop(event) {
-    event.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }
-
-function toggleTheme(dark) {
+  function toggleTheme(dark) {
+    // Switch without every transition firing at once.
     const css = document.createElement("style");
-
-    css.appendChild(
-      document.createTextNode(
-        `* {
-             -webkit-transition: none !important;
-             -moz-transition: none !important;
-             -o-transition: none !important;
-             -ms-transition: none !important;
-             transition: none !important;
-          }
-        `,
-      )
-    );
-
+    css.appendChild(document.createTextNode("* { transition: none !important; }"));
     document.head.appendChild(css);
-
-    if (dark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-
-  window.getComputedStyle(css).opacity;
+    document.documentElement.classList.toggle("dark", dark);
+    window.getComputedStyle(css).opacity;
     document.head.removeChild(css);
   }
 
   function preloadTheme() {
     const userTheme = localStorage.theme;
-
     if (userTheme === "light" || userTheme === "dark") {
       toggleTheme(userTheme === "dark");
     } else {
@@ -180,7 +127,22 @@ function toggleTheme(dark) {
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => init());
-  document.addEventListener("astro:after-swap", () => init());
+  if (!window.__blogInit) {
+    window.__blogInit = true;
+
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+      if (localStorage.theme === "system" || !localStorage.theme) toggleTheme(event.matches);
+    });
+    document.addEventListener("scroll", onScroll);
+    document.addEventListener("DOMContentLoaded", () => init());
+    document.addEventListener("astro:after-swap", () => init());
+    // Carry the theme and the pre-paint classes over to the incoming page.
+    document.addEventListener("astro:before-swap", (e) => {
+      e.newDocument.documentElement.classList.toggle("dark", document.documentElement.classList.contains("dark"));
+      preparePage(e.newDocument);
+    });
+
+    preparePage(document);
+  }
   preloadTheme();
 </script>

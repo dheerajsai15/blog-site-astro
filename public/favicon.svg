@@ -1,0 +1,6 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- "D" at a prompt with a block cursor, in the site's dark stone and amber accent. -->
+  <rect width="300" height="300" rx="50" fill="#1a1816"/>
+  <path fill-rule="evenodd" d="M30 80H86C126 80 146 106 146 150C146 194 126 220 86 220H30V80ZM59 107V193H84C107 193 117 178 117 150C117 122 107 107 84 107H59Z" fill="#f4f1ec"/>
+  <rect x="162" y="30" width="108" height="240" fill="#e0a458"/>
+</svg>

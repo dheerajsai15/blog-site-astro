@@ -1,0 +1,24 @@
+---
+import IconTile from "@components/IconTile.astro";
+import { SITE, SOCIALS } from "@consts";
+import github from "@assets/social/github.svg?raw";
+import linkedin from "@assets/social/linkedin.svg?raw";
+import email from "@assets/social/email.svg?raw";
+
+const icons: Record<string, string> = { github, linkedin };
+
+const links = [
+  ...SOCIALS.map((s) => ({
+    name: s.NAME,
+    svg: icons[s.ICON],
+    brand: s.BRAND,
+    href: s.HREF,
+    label: `${SITE.NAME} on ${s.NAME} (opens in a new tab)`,
+  })),
+  { name: SITE.EMAIL, svg: email, brand: "var(--accent)", href: `mailto:${SITE.EMAIL}`, label: `Email ${SITE.NAME}` },
+];
+---
+
+<ul class="stack" aria-label="Contact" {...Astro.props}>
+  {links.map((link) => <IconTile {...link} />)}
+</ul>

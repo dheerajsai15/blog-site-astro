@@ -1,0 +1,30 @@
+---
+// A square icon tile: grey at rest, tinted with `brand` on hover or focus, with the name as a tooltip.
+// Pass `href` to make it a link; external links open in a new tab.
+type Props = {
+  name: string;
+  svg: string;
+  brand: string;
+  href?: string;
+  label?: string;
+};
+
+const { name, svg, brand, href, label = name } = Astro.props;
+const external = href?.startsWith("http");
+---
+
+<li class="tech" style={`--brand: ${brand}`}>
+  {href ? (
+    <a
+      href={href}
+      class="tech-tile"
+      aria-label={label}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      set:html={svg}
+    />
+  ) : (
+    <span class="tech-tile" set:html={svg} />
+  )}
+  <span class="tech-tip" aria-hidden="true">{name}</span>
+</li>

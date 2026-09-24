@@ -199,7 +199,7 @@ footer {
 }
 
 .stack {
-  @apply mt-7 flex flex-wrap gap-2.5;
+  @apply flex flex-wrap gap-2.5;
 }
 
 .tech {
@@ -209,6 +209,11 @@ footer {
 .tech-tile {
   @apply grid size-11 place-items-center rounded-xl border border-line text-muted;
   transition: color 0.35s, border-color 0.35s, background-color 0.35s, transform 0.45s var(--ease);
+}
+
+.tech-tile:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
 .tech-tile svg {
@@ -221,14 +226,16 @@ footer {
   transition: opacity 0.3s, transform 0.45s var(--ease);
 }
 
-.tech:hover .tech-tile {
+.tech:hover .tech-tile,
+.tech:focus-within .tech-tile {
   color: var(--brand);
   border-color: color-mix(in srgb, var(--brand) 40%, transparent);
   background: color-mix(in srgb, var(--brand) 8%, transparent);
   transform: translateY(-3px);
 }
 
-.tech:hover .tech-tip {
+.tech:hover .tech-tip,
+.tech:focus-within .tech-tip {
   @apply opacity-100;
   transform: translate(-50%, 0);
 }

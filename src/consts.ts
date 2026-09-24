@@ -27,9 +27,13 @@ export const SOCIALS: Socials = [
   {
     NAME: "GitHub",
     HREF: "https://github.com/dheerajsai15",
+    ICON: "github",
+    BRAND: "var(--head)",
   },
   {
     NAME: "LinkedIn",
     HREF: "https://www.linkedin.com/in/dheeraj-sai-60586a1b4/",
+    ICON: "linkedin",
+    BRAND: "#0a66c2",
   },
 ];

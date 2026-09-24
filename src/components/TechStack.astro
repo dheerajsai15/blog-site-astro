@@ -1,4 +1,5 @@
 ---
+import IconTile from "@components/IconTile.astro";
 import typescript from "@assets/stack/typescript.svg?raw";
 import react from "@assets/stack/react.svg?raw";
 import java from "@assets/stack/java.svg?raw";
@@ -7,7 +8,6 @@ import nodejs from "@assets/stack/nodejs.svg?raw";
 import docker from "@assets/stack/docker.svg?raw";
 import kubernetes from "@assets/stack/kubernetes.svg?raw";
 
-// Grey at rest; hover tints each logo with its brand colour.
 const stack = [
   { name: "TypeScript", svg: typescript, brand: "#3178c6" },
   { name: "React", svg: react, brand: "#61dafb" },
@@ -19,11 +19,6 @@ const stack = [
 ];
 ---
 
-<ul class="stack" aria-label={`Topics: ${stack.map((s) => s.name).join(", ")}`} {...Astro.props}>
-  {stack.map(({ name, svg, brand }) => (
-    <li class="tech" style={`--brand: ${brand}`}>
-      <span class="tech-tile" set:html={svg} />
-      <span class="tech-tip" aria-hidden="true">{name}</span>
-    </li>
-  ))}
+<ul class="stack mt-7" aria-label={`Topics: ${stack.map((s) => s.name).join(", ")}`} {...Astro.props}>
+  {stack.map((tech) => <IconTile {...tech} />)}
 </ul>

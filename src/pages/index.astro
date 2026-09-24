@@ -5,7 +5,8 @@ import PostList from "@components/PostList.astro";
 import PostRow from "@components/PostRow.astro";
 import SeriesCard from "@components/SeriesCard.astro";
 import TechStack from "@components/TechStack.astro";
-import { SITE, HOME, SOCIALS } from "@consts";
+import Socials from "@components/Socials.astro";
+import { SITE, HOME } from "@consts";
 import { getPosts, getSeries } from "@lib/content";
 
 const posts = await getPosts();
@@ -46,20 +47,9 @@ const latest = posts.slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
       </PostList>
     </section>
 
-    <section id="connect" class="section" data-intro="fade" data-intro-at="1.45">
-      <div class="section-head"><h2>Say hi</h2></div>
-      <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        {SOCIALS.map((social) => (
-          <li>
-            <a href={social.HREF} target="_blank" rel="noopener" class="link-draw" aria-label={`${SITE.NAME} on ${social.NAME}`}>
-              {social.NAME}
-            </a>
-          </li>
-        ))}
-        <li>
-          <a href={`mailto:${SITE.EMAIL}`} class="link-draw" aria-label={`Email ${SITE.NAME}`}>{SITE.EMAIL}</a>
-        </li>
-      </ul>
+    <section id="connect" class="section">
+      <div class="section-head" data-intro="fade" data-intro-at="1.45"><h2>Say hi</h2></div>
+      <Socials data-intro="pop" data-intro-at="1.5" />
     </section>
   </Container>
 </PageLayout>
